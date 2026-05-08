@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type MouseEvent } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -182,12 +183,6 @@ export default function BashLanding() {
     },
   ];
 
-  const results = [
-    { value: "+162%", label: "посетителей из поиска и рекомендаций" },
-    { value: "3.4x", label: "страниц, которые приводят реальных покупателей" },
-    { value: "27%", label: "всех заявок приходит из интернета" },
-  ];
-
   const chatPreview = [
     {
       id: "#seo-1842",
@@ -260,7 +255,7 @@ export default function BashLanding() {
             className={`rounded-3xl border px-5 py-4 shadow-[0_12px_40px_rgba(65,45,20,0.10)] backdrop-blur ${theme.shell}`}
           >
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-center gap-3">
+              <Link href="/" className="flex items-center gap-3">
                 <motion.div
                   whileHover={{ rotate: -6, scale: 1.06 }}
                   className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#b79a67] bg-[#efe1b8] shadow-inner"
@@ -278,7 +273,7 @@ export default function BashLanding() {
                     GEO+SEO от Art-Web.ru    
                   </div>
                 </div>
-              </div>
+              </Link>
 
               <nav className="flex flex-wrap items-center gap-3 text-sm">
                 {nav.map((item, index) => (
@@ -297,7 +292,7 @@ export default function BashLanding() {
                 ))}
               </nav>
 
-              <div className="flex items-center gap-2">
+              <div className="hidden items-center gap-2">
                 <Button
                   variant="default"
                   onClick={() => setDarkMode((v) => !v)}
@@ -358,35 +353,6 @@ export default function BashLanding() {
               </motion.div>
             </div>
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {results.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.55, delay: 0.16 + index * 0.08 }}
-                  whileHover={{ y: -6 }}
-                >
-                  <Card
-                    className={`rounded-3xl shadow-[0_10px_30px_rgba(70,50,25,0.08)] ${theme.statCard}`}
-                  >
-                    <CardContent className="p-5">
-                      <motion.div
-                        initial={{ scale: 0.92, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: 0.24 + index * 0.09 }}
-                        className="text-2xl font-semibold"
-                      >
-                        {stat.value}
-                      </motion.div>
-                      <div className={`mt-1 text-sm ${theme.subtext}`}>
-                        {stat.label}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
 
           <motion.div
@@ -417,7 +383,7 @@ export default function BashLanding() {
                         фрагмент стратегии
                       </div>
                       <div className="mt-1 font-mono text-sm">
-                        /offers/seo-geo-growth
+                        примеры из нашей практики
                       </div>
                     </div>
 

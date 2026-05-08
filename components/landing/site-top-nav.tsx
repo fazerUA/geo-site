@@ -16,7 +16,7 @@ export default function SiteTopNav() {
     <header className="sticky top-4 z-40 mb-8">
       <div className="rounded-3xl border border-[#3a2d1b] bg-[#16120f]/88 px-5 py-4 shadow-[0_12px_40px_rgba(65,45,20,0.10)] backdrop-blur">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#b79a67] bg-[#efe1b8] shadow-inner">
               <TerminalSquare className="h-5 w-5 text-[#5b4424]" />
             </div>
@@ -29,7 +29,7 @@ export default function SiteTopNav() {
                 GEO+SEO от Art-Web.ru
               </div>
             </div>
-          </div>
+          </Link>
 
           <nav className="flex flex-wrap items-center gap-3 text-sm">
             {nav.map((item) => (
