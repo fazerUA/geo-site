@@ -1,0 +1,37 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /drafts/
+
+# AI crawlers: allow major search assistants
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Optional training/low-value crawler policy
+User-agent: Bytespider
+Disallow: /
+
+Sitemap: https://art-web-geo.ru/sitemap.xml
