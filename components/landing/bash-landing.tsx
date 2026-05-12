@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type MouseEvent } from "react";
+import { useSiteTheme } from "@/components/site-theme-provider";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -61,7 +62,7 @@ type Theme = {
 };
 
 export default function BashLanding() {
-  const [darkMode, setDarkMode] = useState(true);
+  const { isDark: darkMode, toggleTheme } = useSiteTheme();
   const [isWorkIncludesOpen, setIsWorkIncludesOpen] = useState(false);
   const normalizedWorkIncludesContent = useMemo(
     () =>
@@ -295,7 +296,7 @@ export default function BashLanding() {
               <div className="flex items-center gap-2">
                 <Button
                   variant="default"
-                  onClick={() => setDarkMode((v) => !v)}
+                  onClick={toggleTheme}
                   className={theme.buttonSecondary}
                 >
                   {darkMode ? (

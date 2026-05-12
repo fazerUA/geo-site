@@ -1,0 +1,47 @@
+# -----------------------------------------------------------------------------
+# Apache: корень статического сайта (копируется в out/ при next build).
+# -----------------------------------------------------------------------------
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # TRACE/TRACK — частые пункты в чеклистах по безопасности
+  RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)$
+  RewriteRule .* - [F,L]
+
+  # Редирект на HTTPS (с учётом TLS на прокси: X-Forwarded-Proto)
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,QSA]
+</IfModule>
+
+Options -Indexes
+
+# Утечки служебных каталогов/файлов, если они случайно оказались в корне сайта
+<IfModule mod_alias.c>
+  RedirectMatch 403 (?i)/\.git(?:/|$)
+  RedirectMatch 403 (?i)/\.svn(?:/|$)
+  RedirectMatch 403 (?i)/\.hg(?:/|$)
+  RedirectMatch 403 (?i)/\.env(?:$|\.)
+  RedirectMatch 403 (?i)/\.htpasswd$
+  RedirectMatch 403 (?i)/\.user\.ini$
+  RedirectMatch 403 (?i)/composer\.(json|lock)$
+  RedirectMatch 403 (?i)/package(-lock)?\.json$
+  RedirectMatch 403 (?i)/yarn\.lock$
+</IfModule>
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+
+  # HSTS только при ответе по HTTPS (у прямого Apache env=HTTPS; за прокси может не выставиться — редирект выше всё равно включает HTTPS)
+  # Без includeSubDomains: иначе все поддомены тоже обязаны отдавать HTTPS
+  Header always set Strict-Transport-Security "max-age=31536000" env=HTTPS
+
+  Header unset X-Powered-By
+</IfModule>
