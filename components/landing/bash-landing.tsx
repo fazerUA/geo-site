@@ -292,7 +292,7 @@ export default function BashLanding() {
                 ))}
               </nav>
 
-              <div className="hidden items-center gap-2">
+              <div className="flex items-center gap-2">
                 <Button
                   variant="default"
                   onClick={() => setDarkMode((v) => !v)}
