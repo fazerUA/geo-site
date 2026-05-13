@@ -26,6 +26,10 @@ import {
   TerminalSquare,
   Send,
   MessageCircle,
+  Building2,
+  Landmark,
+  FileText,
+  MapPin,
 } from "lucide-react";
 
 import CasesSection from "@/components/landing/cases-section";
@@ -215,12 +219,12 @@ export default function BashLanding() {
   const messengerLinks = [
     {
       label: "Telegram",
-      href: "https://t.me/example_username",
+      href: "https://t.me/GEO_art_web",
       icon: Send,
     },
     {
       label: "Max",
-      href: "https://max.com/example_profile",
+      href: "https://max.ru/u/f9LHodD0cOJyKElMf7icMHMHWl-L07eRhF9_ufZu0OPXxWj-jjjsrUasEyg",
       icon: MessageCircle,
     },
   ];
@@ -665,6 +669,242 @@ export default function BashLanding() {
             </Card>
           </motion.div>
         </section>
+
+        <footer className="pb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+          >
+            <Card
+              className={`overflow-hidden rounded-[36px] border shadow-[0_18px_60px_rgba(56,39,20,0.10)] ${theme.card}`}
+            >
+              <CardContent className="p-8 md:p-10 lg:p-12">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#b79a67] bg-[#efe1b8] shadow-inner">
+                      <TerminalSquare className="h-5 w-5 text-[#5b4424]" />
+                    </div>
+                    <div>
+                      <div
+                        className={`text-xs uppercase tracking-[0.28em] ${theme.shellText}`}
+                      >
+                        Реквизиты компании
+                      </div>
+                      <div className="font-serif text-2xl font-semibold">
+                        GEO+SEO от Art-Web.ru
+                      </div>
+                    </div>
+                  </div>
+                  <p className={`max-w-md text-sm leading-6 ${theme.subtext}`}>
+                    Работаем официально с физическими и юридическими лицами.
+                    Договор, закрывающие документы, оплата по счёту или картой.
+                  </p>
+                </div>
+
+                <div
+                  className={`my-8 h-px w-full bg-gradient-to-r from-transparent via-current to-transparent opacity-15`}
+                />
+
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+                  <section aria-labelledby="footer-legal">
+                    <div
+                      id="footer-legal"
+                      className={`mb-4 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.24em] ${theme.shellText}`}
+                    >
+                      <Building2 className="h-3.5 w-3.5" />
+                      Юридические данные
+                    </div>
+                    <dl className="space-y-3 text-sm leading-6">
+                      <div>
+                        <dt
+                          className={`text-[11px] uppercase tracking-wider ${theme.muted}`}
+                        >
+                          Организация
+                        </dt>
+                        <dd className="mt-0.5 font-medium">
+                          ИП Григорьев Андрей Александрович
+                        </dd>
+                      </div>
+                      <div>
+                        <dt
+                          className={`flex items-center gap-1.5 text-[11px] uppercase tracking-wider ${theme.muted}`}
+                        >
+                          <MapPin className="h-3 w-3" />
+                          Юридический адрес
+                        </dt>
+                        <dd className={`mt-0.5 ${theme.subtext}`}>
+                          295000, Республика Крым, г. Симферополь,
+                          <br />
+                          ул. Александра Невского, д. 30, эт. 2, оф. 21
+                        </dd>
+                      </div>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div>
+                          <dt
+                            className={`text-[11px] uppercase tracking-wider ${theme.muted}`}
+                          >
+                            ИНН
+                          </dt>
+                          <dd className="mt-0.5 font-mono tabular-nums">
+                            910200091207
+                          </dd>
+                        </div>
+                        <div>
+                          <dt
+                            className={`text-[11px] uppercase tracking-wider ${theme.muted}`}
+                          >
+                            ОГРНИП
+                          </dt>
+                          <dd className="mt-0.5 font-mono tabular-nums">
+                            314910224500269
+                          </dd>
+                        </div>
+                      </div>
+                      <div>
+                        <dt
+                          className={`text-[11px] uppercase tracking-wider ${theme.muted}`}
+                        >
+                          Свидетельство о регистрации
+                        </dt>
+                        <dd className={`mt-0.5 ${theme.subtext}`}>
+                          № 008850757 от 16.09.2014
+                        </dd>
+                      </div>
+                    </dl>
+                  </section>
+
+                  <section aria-labelledby="footer-bank">
+                    <div
+                      id="footer-bank"
+                      className={`mb-4 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.24em] ${theme.shellText}`}
+                    >
+                      <Landmark className="h-3.5 w-3.5" />
+                      Банковские реквизиты
+                    </div>
+                    <dl className="space-y-3 text-sm leading-6">
+                      <div>
+                        <dt
+                          className={`text-[11px] uppercase tracking-wider ${theme.muted}`}
+                        >
+                          Расчётный счёт
+                        </dt>
+                        <dd className="mt-0.5 break-all font-mono tabular-nums">
+                          40802810952000123333
+                        </dd>
+                      </div>
+                      <div>
+                        <dt
+                          className={`text-[11px] uppercase tracking-wider ${theme.muted}`}
+                        >
+                          Банк
+                        </dt>
+                        <dd className="mt-0.5">
+                          Юго-Западный банк ПАО Сбербанк
+                        </dd>
+                      </div>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div>
+                          <dt
+                            className={`text-[11px] uppercase tracking-wider ${theme.muted}`}
+                          >
+                            БИК
+                          </dt>
+                          <dd className="mt-0.5 font-mono tabular-nums">
+                            046015602
+                          </dd>
+                        </div>
+                        <div>
+                          <dt
+                            className={`text-[11px] uppercase tracking-wider ${theme.muted}`}
+                          >
+                            Корр. счёт
+                          </dt>
+                          <dd className="mt-0.5 break-all font-mono tabular-nums">
+                            30101810600000000602
+                          </dd>
+                        </div>
+                      </div>
+                    </dl>
+                  </section>
+
+                  <section
+                    aria-labelledby="footer-edo"
+                    className="md:col-span-2 lg:col-span-1"
+                  >
+                    <div
+                      id="footer-edo"
+                      className={`mb-4 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.24em] ${theme.shellText}`}
+                    >
+                      <FileText className="h-3.5 w-3.5" />
+                      Электронный документооборот
+                    </div>
+                    <dl className="space-y-3 text-sm leading-6">
+                      <div>
+                        <dt
+                          className={`text-[11px] uppercase tracking-wider ${theme.muted}`}
+                        >
+                          Оператор
+                        </dt>
+                        <dd className="mt-0.5">
+                          ООО «Компания „Тензор&#34;»
+                        </dd>
+                      </div>
+                      <div>
+                        <dt
+                          className={`text-[11px] uppercase tracking-wider ${theme.muted}`}
+                        >
+                          Идентификатор участника ЭДО
+                        </dt>
+                        <dd
+                          className={`mt-0.5 break-all font-mono text-xs tracking-tight ${theme.subtext}`}
+                        >
+                          2BEa1a2923fa021440282350db88c222343
+                        </dd>
+                      </div>
+                      <p className={`pt-1 text-xs leading-5 ${theme.muted}`}>
+                        Обмениваемся УПД, актами и счёт-фактурами в электронном
+                        виде через систему «Сбис».
+                      </p>
+                    </dl>
+                  </section>
+                </div>
+
+                <div
+                  className={`my-8 h-px w-full bg-gradient-to-r from-transparent via-current to-transparent opacity-15`}
+                />
+
+                <div className="flex flex-col-reverse items-start justify-between gap-4 sm:flex-row sm:items-center">
+                  <p className={`text-xs ${theme.muted}`}>
+                    © {new Date().getFullYear()} ИП Григорьев А. А. Все права защищены.
+                  </p>
+                  <div className="flex items-center gap-2">
+                    {messengerLinks.map((item) => {
+                      const Icon = item.icon;
+
+                      return (
+                        <a
+                          key={item.label}
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={item.label}
+                          title={item.label}
+                          className={messengerFooterClass}
+                        >
+                          <span className="relative z-[1] inline-flex items-center">
+                            <Icon className="h-4 w-4" />
+                          </span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </footer>
 
         {isWorkIncludesOpen ? (
           <div

@@ -1,20 +1,43 @@
 "use client";
 
-import { type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import { sendLeadRequestByEmail } from "@/lib/send-lead-request";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { sendLeadRequest } from "@/lib/send-lead-request";
 
 type Props = {
   darkMode?: boolean;
 };
 
+type SubmitStatus =
+  | { kind: "idle" }
+  | { kind: "pending" }
+  | { kind: "success" }
+  | { kind: "error"; message: string };
+
 export default function LeadFormSection({ darkMode = true }: Props) {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [status, setStatus] = useState<SubmitStatus>({ kind: "idle" });
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    sendLeadRequestByEmail(new FormData(event.currentTarget), "Форма обратной связи");
+    if (status.kind === "pending") return;
+
+    const form = event.currentTarget;
+    setStatus({ kind: "pending" });
+
+    const result = await sendLeadRequest(
+      new FormData(form),
+      "Форма обратной связи"
+    );
+
+    if (result.ok) {
+      setStatus({ kind: "success" });
+      form.reset();
+    } else {
+      setStatus({ kind: "error", message: result.error });
+    }
   };
 
   const theme = darkMode
@@ -80,7 +103,19 @@ export default function LeadFormSection({ darkMode = true }: Props) {
             className={`rounded-[32px] shadow-[0_20px_60px_rgba(38,27,16,0.16)] ${theme.card}`}
           >
             <CardContent className="p-6 md:p-8">
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} noValidate>
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute -left-[9999px] h-0 w-0 opacity-0"
+              />
+              <fieldset
+                disabled={status.kind === "pending"}
+                className="contents disabled:opacity-70"
+              >
               <div className="grid gap-4 md:grid-cols-2">
                 <input
                   name="name"
@@ -127,13 +162,50 @@ export default function LeadFormSection({ darkMode = true }: Props) {
                 required
               />
 
+              <AnimatePresence mode="wait" initial={false}>
+                {status.kind === "success" ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    className={`mt-4 flex items-start gap-3 rounded-2xl border border-[#3b7a3b]/40 bg-[#3b7a3b]/10 px-4 py-3 text-sm leading-6 ${
+                      darkMode ? "text-[#bfe5be]" : "text-[#2d5a2d]"
+                    }`}
+                  >
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0" />
+                    <span>
+                      Заявка отправлена! Ответим в течение 1 рабочего дня
+                      на указанную почту.
+                    </span>
+                  </motion.div>
+                ) : status.kind === "error" ? (
+                  <motion.div
+                    key="error"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    className={`mt-4 flex items-start gap-3 rounded-2xl border border-[#a35a30]/40 bg-[#a35a30]/10 px-4 py-3 text-sm leading-6 ${
+                      darkMode ? "text-[#f1c69a]" : "text-[#7a4220]"
+                    }`}
+                  >
+                    <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0" />
+                    <span>{status.message}</span>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className={`max-w-md text-xs leading-6 ${theme.subtext}`}>
                   Нажимая кнопку, вы соглашаетесь на обработку персональных данных и
                   получение обратной связи по вашему запросу.
                 </p>
                 <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.985 }}>
-                  <Button type="submit" className={`${theme.button} group relative overflow-hidden`}>
+                  <Button
+                    type="submit"
+                    disabled={status.kind === "pending"}
+                    className={`${theme.button} group relative overflow-hidden`}
+                  >
                     <span
                       aria-hidden="true"
                       className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-white/30"
@@ -143,12 +215,22 @@ export default function LeadFormSection({ darkMode = true }: Props) {
                       className="pointer-events-none absolute inset-[-2px] rounded-full bg-[radial-gradient(circle_at_15%_20%,rgba(255,255,255,0.45),transparent_35%),radial-gradient(circle_at_85%_80%,rgba(255,255,255,0.2),transparent_38%)] opacity-65 blur-[1.5px] transition-opacity duration-300 group-hover:opacity-90"
                     />
                     <span className="relative z-[1] inline-flex items-center gap-2">
-                      Получить консультацию
-                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      {status.kind === "pending" ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Отправляем…
+                        </>
+                      ) : (
+                        <>
+                          Получить консультацию
+                          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                        </>
+                      )}
                     </span>
                   </Button>
                 </motion.div>
               </div>
+              </fieldset>
               </form>
             </CardContent>
           </Card>
