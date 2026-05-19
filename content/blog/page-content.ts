@@ -11,4 +11,10 @@ export const blogPageContent = {
   emptyState: "Пока нет записей. Создайте первый файл в",
   emptyStateSuffix: ".",
   readMoreLabel: "Читать статью",
+  pinnedLabel: "Закреплённая запись",
+  tagsEyebrow: "Ярлыки",
+  tagPageEyebrow: "Ярлык",
+  tagPageHeadingPrefix: "Записи с ярлыком",
+  tagPageEmpty: "По этому ярлыку пока нет записей.",
+  allPostsLink: "Все записи",
 };

@@ -1,16 +1,13 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 
 type Props = {
   darkMode?: boolean;
 };
 
 export default function FaqSection({ darkMode = true }: Props) {
-  const [openIndex, setOpenIndex] = useState<number>(0);
-
   const theme = darkMode
     ? {
         sectionText: "text-[#f7eedf]",
@@ -42,7 +39,6 @@ export default function FaqSection({ darkMode = true }: Props) {
     },
   ];
 
-  // Генерация JSON-LD микроразметки для SEO
   const faqSchema = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -58,7 +54,6 @@ export default function FaqSection({ darkMode = true }: Props) {
 
   return (
     <section className="pb-16">
-      {/* Микроразметка FAQ для поисковых систем */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -78,57 +73,27 @@ export default function FaqSection({ darkMode = true }: Props) {
       </div>
 
       <div className="space-y-4">
-        {items.map((item, index) => {
-          const isOpen = openIndex === index;
-
-          return (
-            <motion.div
-              key={item.q}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.05 + index * 0.05 }}
+        {items.map((item, index) => (
+          <motion.div
+            key={item.q}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.05 + index * 0.05 }}
+          >
+            <Card
+              className={`rounded-[26px] shadow-[0_12px_30px_rgba(68,49,25,0.08)] ${theme.card}`}
             >
-              <Card
-                className={`rounded-[26px] shadow-[0_12px_30px_rgba(68,49,25,0.08)] ${theme.card}`}
-              >
-                <CardContent className="p-0">
-                  <button
-                    type="button"
-                    onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                    className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
-                  >
-                    <span className={`text-lg font-semibold ${theme.sectionText}`}>
-                      {item.q}
-                    </span>
-
-                    <motion.div
-                      animate={{ rotate: isOpen ? 180 : 0 }}
-                      transition={{ duration: 0.25 }}
-                    >
-                      <ChevronDown className="h-5 w-5" />
-                    </motion.div>
-                  </button>
-
-                  <AnimatePresence initial={false}>
-                    {isOpen ? (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className={`px-6 pb-6 text-sm leading-7 ${theme.subtext}`}>
-                          {item.a}
-                        </div>
-                      </motion.div>
-                    ) : null}
-                  </AnimatePresence>
-                </CardContent>
-              </Card>
-            </motion.div>
-          );
-        })}
+              <CardContent className="px-6 py-5">
+                <h3 className={`text-lg font-semibold ${theme.sectionText}`}>
+                  {item.q}
+                </h3>
+                <p className={`mt-3 text-sm leading-7 ${theme.subtext}`}>
+                  {item.a}
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
