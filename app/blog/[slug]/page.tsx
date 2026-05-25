@@ -62,12 +62,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         <h1 className="font-serif text-4xl font-semibold leading-tight md:text-5xl">{post.title}</h1>
 
-        {post.tags.length > 0 && (
-          <div className="mt-5">
-            <BlogTags tags={post.tags} />
-          </div>
-        )}
-
         <div className="blog-prose mt-6">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
@@ -91,6 +85,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             {post.content}
           </ReactMarkdown>
         </div>
+
+        {post.tags.length > 0 && (
+          <section
+            className="blog-tags-cloud mt-10"
+            aria-label={blogPageContent.tagsEyebrow}
+          >
+            <p className="blog-eyebrow mb-3 text-xs uppercase tracking-[0.28em]">
+              {blogPageContent.tagsEyebrow}
+            </p>
+            <BlogTags tags={post.tags} />
+          </section>
+        )}
 
         <div className="mt-10 flex justify-end">
           <Link href="/blog" className="blog-ghost-link">

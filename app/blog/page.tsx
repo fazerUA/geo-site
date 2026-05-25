@@ -34,15 +34,6 @@ export default function BlogPage() {
             </p>
           </div>
 
-          {allTags.length > 0 && (
-            <section className="blog-tags-cloud" aria-label={blogPageContent.tagsEyebrow}>
-              <p className="blog-eyebrow mb-3 text-xs uppercase tracking-[0.28em]">
-                {blogPageContent.tagsEyebrow}
-              </p>
-              <BlogTags tags={allTags.map((entry) => entry.tag)} />
-            </section>
-          )}
-
           {blogPosts.length === 0 ? (
             <div className="blog-empty-card">
               {blogPageContent.emptyState}{" "}
@@ -71,6 +62,18 @@ export default function BlogPage() {
                 </Link>
               ))}
             </div>
+          )}
+
+          {allTags.length > 0 && (
+            <section
+              className="blog-tags-cloud mt-10"
+              aria-label={blogPageContent.tagsEyebrow}
+            >
+              <p className="blog-eyebrow mb-3 text-xs uppercase tracking-[0.28em]">
+                {blogPageContent.tagsEyebrow}
+              </p>
+              <BlogTags tags={allTags.map((entry) => entry.tag)} />
+            </section>
           )}
         </div>
       </div>
