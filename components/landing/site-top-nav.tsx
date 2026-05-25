@@ -33,7 +33,7 @@ export default function SiteTopNav() {
     : "h-12 rounded-full border border-[#2a2016] bg-[linear-gradient(135deg,#2a2016_0%,#3a2b19_48%,#5b4020_100%)] px-7 text-[15px] font-semibold tracking-[0.01em] text-[#fbf7ee] shadow-[0_10px_24px_rgba(41,30,18,0.26)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(41,30,18,0.34)] active:translate-y-0";
 
   return (
-    <header className="sticky top-4 z-40 mb-8">
+    <header className="mb-8">
       <div className={shell}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <Link href="/" className="flex items-center gap-3">
@@ -51,7 +51,7 @@ export default function SiteTopNav() {
             </div>
           </Link>
 
-          <nav className="flex flex-wrap items-center gap-3 text-sm">
+          <nav className="flex flex-wrap items-center gap-3 text-sm" aria-label="Основное меню">
             {nav.map((item) => (
               <Link key={item.label} href={item.href} className={navLink}>
                 {item.label}

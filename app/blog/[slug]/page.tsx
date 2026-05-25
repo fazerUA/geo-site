@@ -49,8 +49,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     <main className="blog-main px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <SiteTopNav />
-      </div>
-      <article className="mx-auto max-w-3xl">
+        <article className="mx-auto max-w-3xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
             {post.pinned && <BlogPinnedBadge label={blogPageContent.pinnedLabel} />}
@@ -98,7 +97,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             Ко всем записям
           </Link>
         </div>
-      </article>
+        </article>
+      </div>
     </main>
   );
 }

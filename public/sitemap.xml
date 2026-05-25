@@ -2,15 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://art-web-geo.ru/</loc>
-    <lastmod>2026-05-12</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://art-web-geo.ru/blog/</loc>
-    <lastmod>2026-05-12</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/rabotaet-li-geo-prodvizhenie/</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tab/</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://art-web-geo.ru/blog/seo-geo-strategy-2026/</loc>
@@ -20,8 +32,62 @@
   </url>
   <url>
     <loc>https://art-web-geo.ru/blog/7-ai-visibility-mistakes/</loc>
-    <lastmod>2026-05-02</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tag/geo/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tag/seo/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tag/faq/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tag/ux/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tag/%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%B5%D0%B3%D0%B8%D1%8F/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tag/%D0%BD%D0%B5%D0%B9%D1%80%D0%BE%D1%81%D0%B5%D1%82%D0%B8/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tag/%D0%BF%D1%80%D0%BE%D0%B4%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D0%B8%D0%B8/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tag/ai-%D0%B2%D0%B8%D0%B4%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D1%8C/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tag/%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D0%B8/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>

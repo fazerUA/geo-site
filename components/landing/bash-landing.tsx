@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type MouseEvent } from "react";
+import { useMemo, useState } from "react";
 import { useSiteTheme } from "@/components/site-theme-provider";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,6 @@ import rehypeRaw from "rehype-raw";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import {
-  Moon,
-  Sun,
   Search,
   LineChart,
   ChevronRight,
@@ -36,6 +34,7 @@ import CasesSection from "@/components/landing/cases-section";
 import PricingSection from "@/components/landing/pricing-section";
 import FaqSection from "@/components/landing/faq-section";
 import LeadFormSection from "@/components/landing/lead-form-section";
+import SiteTopNav from "@/components/landing/site-top-nav";
 import { workIncludesContent } from "@/components/landing/work-includes-content";
 
 type Theme = {
@@ -66,7 +65,7 @@ type Theme = {
 };
 
 export default function BashLanding() {
-  const { isDark: darkMode, toggleTheme } = useSiteTheme();
+  const { isDark: darkMode } = useSiteTheme();
   const [isWorkIncludesOpen, setIsWorkIncludesOpen] = useState(false);
   const normalizedWorkIncludesContent = useMemo(
     () =>
@@ -206,16 +205,6 @@ export default function BashLanding() {
     },
   ];
 
-  const nav = [
-    { label: "SEO", href: "#seo" },
-    { label: "GEO", href: "#geo" },
-    { label: "Кейсы", href: "#cases" },
-    { label: "Блог", href: "/blog" },
-    { label: "Тарифы", href: "#pricing" },
-    { label: "Вопросы", href: "#faq" },
-    { label: "Контакты", href: "#contact" },
-  ];
-
   const messengerLinks = [
     {
       label: "Telegram",
@@ -232,90 +221,14 @@ export default function BashLanding() {
     ? "group relative inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-[#f6e5bf] bg-[linear-gradient(135deg,#fdf0cd_0%,#f2d79d_45%,#d9af68_100%)] text-[#24180c] shadow-[0_12px_30px_rgba(222,173,96,0.34)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(222,173,96,0.46)]"
     : "group relative inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-[#2a2016] bg-[linear-gradient(135deg,#2a2016_0%,#3a2b19_48%,#5b4020_100%)] text-[#fbf7ee] shadow-[0_10px_24px_rgba(41,30,18,0.3)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(41,30,18,0.42)]";
 
-  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (!href.startsWith("#")) {
-      return;
-    }
-
-    event.preventDefault();
-
-    const target = document.querySelector(href);
-    if (target instanceof HTMLElement) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-
   return (
     <div
-      className={`min-h-screen overflow-x-hidden transition-colors duration-500 ${theme.page}`}
+      className={`min-h-screen overflow-x-clip transition-colors duration-500 ${theme.page}`}
     >
       <div className={`absolute inset-0 ${theme.overlay}`} />
 
       <div className="relative mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <header className="sticky top-4 z-40 mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55 }}
-            className={`rounded-3xl border px-5 py-4 shadow-[0_12px_40px_rgba(65,45,20,0.10)] backdrop-blur ${theme.shell}`}
-          >
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <Link href="/" className="flex items-center gap-3">
-                <motion.div
-                  whileHover={{ rotate: -6, scale: 1.06 }}
-                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#b79a67] bg-[#efe1b8] shadow-inner"
-                >
-                  <TerminalSquare className="h-5 w-5 text-[#5b4424]" />
-                </motion.div>
-
-                <div>
-                  <div
-                    className={`text-xs uppercase tracking-[0.28em] ${theme.shellText}`}
-                  >
-                    продвижение в поиске и нейросетях
-                  </div>
-                  <div className="font-serif text-2xl font-semibold">
-                    GEO+SEO от Art-Web.ru    
-                  </div>
-                </div>
-              </Link>
-
-              <nav className="flex flex-wrap items-center gap-3 text-sm">
-                {nav.map((item, index) => (
-                  <motion.a
-                    key={item.label}
-                    href={item.href}
-                    onClick={(event) => handleNavClick(event, item.href)}
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.08 + index * 0.04 }}
-                    whileHover={{ y: -2 }}
-                    className={`rounded-full px-3 py-2 transition ${theme.subtext} hover:bg-white/5 hover:text-white`}
-                  >
-                    {item.label}
-                  </motion.a>
-                ))}
-              </nav>
-
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="default"
-                  onClick={toggleTheme}
-                  className={theme.buttonSecondary}
-                >
-                  {darkMode ? (
-                    <Sun className="mr-2 h-4 w-4" />
-                  ) : (
-                    <Moon className="mr-2 h-4 w-4" />
-                  )}
-                  {darkMode ? "Светлая тема" : "Тёмная тема"}
-                </Button>
-
-              </div>
-            </div>
-          </motion.div>
-        </header>
-
+        <SiteTopNav />
         <section
           id="seo"
           className="grid scroll-mt-28 items-center gap-8 pb-16 pt-6 lg:grid-cols-[1.08fr_0.92fr] lg:pb-24 lg:pt-10"
