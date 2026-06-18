@@ -62,6 +62,24 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         <h1 className="font-serif text-4xl font-semibold leading-tight md:text-5xl">{post.title}</h1>
 
+        {post.image && (
+          <div className="my-6">
+            <img
+              src={post.image}
+              alt={post.title}
+              className="w-full rounded-xl"
+              width={1200}
+              height={630}
+            />
+          </div>
+        )}
+
+        {post.tags.length > 0 && (
+          <div className="mt-5">
+            <BlogTags tags={post.tags} />
+          </div>
+        )}
+
         <div className="blog-prose mt-6">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}

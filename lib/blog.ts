@@ -11,6 +11,7 @@ export type BlogPost = {
   content: string;
   pinned: boolean;
   tags: string[];
+  image?: string;
 };
 
 export type BlogTagEntry = {
@@ -27,6 +28,7 @@ type BlogFrontmatter = {
   metaDescription?: string;
   pinned?: string;
   tags?: string;
+  image?: string;
 };
 
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
@@ -150,6 +152,7 @@ export function getAllBlogPosts(): BlogPost[] {
       content: content.trim(),
       pinned: frontmatter.pinned === "true",
       tags: parseTags(frontmatter.tags),
+      image: frontmatter.image || undefined,
     };
   });
 
