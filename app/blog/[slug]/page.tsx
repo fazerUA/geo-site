@@ -9,6 +9,7 @@ import SiteTopNav from "@/components/landing/site-top-nav";
 import { BlogPinnedBadge } from "@/components/blog/pinned-badge";
 import { blogPageContent } from "@/content/blog/page-content";
 import { BlogTags } from "@/components/blog/blog-tags";
+import { ImageLightbox } from "@/components/blog/image-lightbox";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
@@ -98,6 +99,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               ),
               strong: ({ children }) => <strong>{children}</strong>,
               blockquote: ({ children }) => <blockquote>{children}</blockquote>,
+              img: ({ src, alt }) => (
+                <ImageLightbox src={String(src ?? "")} alt={String(alt ?? "")} />
+              ),
             }}
           >
             {post.content}
