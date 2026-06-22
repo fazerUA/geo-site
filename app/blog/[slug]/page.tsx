@@ -54,7 +54,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
             {post.pinned && <BlogPinnedBadge label={blogPageContent.pinnedLabel} />}
-            <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">{post.date}</p>
+            <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">Опубликовано {post.date}</p>
           </div>
           <Link href="/blog" className="blog-ghost-link">
             Ко всем записям
