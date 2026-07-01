@@ -8,7 +8,7 @@
   </url>
   <url>
     <loc>https://art-web-geo.ru/blog/</loc>
-    <lastmod>2026-05-20</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -63,6 +63,12 @@
   <url>
     <loc>https://art-web-geo.ru/blog/robots-sitemap/</loc>
     <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/fake-jobs/</loc>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -135,6 +141,12 @@
   <url>
     <loc>https://art-web-geo.ru/blog/tag/live-blog/</loc>
     <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://art-web-geo.ru/blog/tag/black-seo/</loc>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
