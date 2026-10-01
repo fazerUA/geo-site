@@ -1,15 +1,20 @@
-import type { Metadata } from "next";
 import Link from "next/link";
-import { getAllBlogPosts, getAllBlogTags } from "@/lib/blog";
+import { getAllBlogPosts, getAllBlogTags, formatBlogDate } from "@/lib/blog";
 import SiteTopNav from "@/components/landing/site-top-nav";
 import { blogPageContent } from "@/content/blog/page-content";
 import { BlogPinnedBadge } from "@/components/blog/pinned-badge";
 import { BlogTags } from "@/components/blog/blog-tags";
+import { buildPageMetadata } from "@/lib/seo/metadata-helpers";
+import { buildBreadcrumbSchema } from "@/lib/schema/breadcrumb-schema";
+import { buildBlogSchema } from "@/lib/schema/site-schema";
+import { JsonLdScript } from "@/components/schema/json-ld-script";
+import { BlogBreadcrumbs } from "@/components/blog/blog-breadcrumbs";
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: blogPageContent.metaTitle,
   description: blogPageContent.metaDescription,
-};
+  path: "/blog/",
+});
 
 export default function BlogPage() {
   const blogPosts = getAllBlogPosts();
@@ -17,10 +22,24 @@ export default function BlogPage() {
 
   return (
     <main className="blog-main px-4 py-10 sm:px-6 lg:px-8">
+      <JsonLdScript
+        data={[
+          buildBlogSchema(),
+          buildBreadcrumbSchema([
+            { name: "Главная", path: "/" },
+            { name: "Блог", path: "/blog/" },
+          ]),
+        ]}
+      />
       <div className="mx-auto max-w-7xl">
         <SiteTopNav />
         <div className="mx-auto max-w-4xl">
-          <div className="mb-8">
+          <BlogBreadcrumbs
+            items={[
+              { name: "Главная", path: "/" },
+              { name: "Блог", path: "/blog/" },
+            ]}
+          />          <div className="mb-8">
             <p className="blog-eyebrow text-xs uppercase tracking-[0.28em]">
               {blogPageContent.eyebrow}
             </p>
@@ -51,10 +70,10 @@ export default function BlogPage() {
                   {post.pinned ? (
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <BlogPinnedBadge label={blogPageContent.pinnedLabel} />
-                      <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">{post.date}</p>
+                      <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">{formatBlogDate(post.date)}</p>
                     </div>
                   ) : (
-                    <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">{post.date}</p>
+                    <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">{formatBlogDate(post.date)}</p>
                   )}
                   <h2 className="mt-3 text-2xl font-semibold">{post.title}</h2>
                   <p className="blog-lead mt-3 leading-7">{post.excerpt}</p>

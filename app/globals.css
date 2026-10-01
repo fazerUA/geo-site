@@ -192,6 +192,120 @@ html[data-theme="light"] {
   color: var(--blog-read-more);
 }
 
+.about-specialist-card {
+  border-radius: 1.5rem;
+  border: 1px solid var(--blog-card-border);
+  background-color: var(--blog-card-bg);
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(70, 50, 25, 0.08);
+}
+
+@media (min-width: 640px) {
+  .about-specialist-card {
+    padding: 2rem;
+  }
+}
+
+.about-specialist-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .about-specialist-header {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+}
+
+.about-specialist-photo {
+  width: 8.5rem;
+  height: 8.5rem;
+  flex-shrink: 0;
+  border-radius: 1.25rem;
+  border: 1px solid var(--blog-card-border);
+  object-fit: cover;
+  object-position: center top;
+  box-shadow: 0 8px 24px rgba(70, 50, 25, 0.12);
+  cursor: zoom-in;
+}
+
+.about-specialist-intro {
+  min-width: 0;
+  flex: 1;
+}
+
+.blog-author-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.blog-author-photo {
+  width: 3.5rem;
+  height: 3.5rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  border: 1px solid var(--blog-card-border);
+  object-fit: cover;
+  object-position: center top;
+  box-shadow: 0 4px 12px rgba(70, 50, 25, 0.1);
+}
+
+.blog-author-intro {
+  min-width: 0;
+  flex: 1;
+}
+
+.about-specialist-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1rem;
+}
+
+.about-specialist-messenger-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.about-specialist-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.about-specialist-messenger-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.about-specialist-messenger-icon--telegram {
+  color: #2aabee;
+}
+
+.about-specialist-contact-link {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--blog-read-more);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.about-specialist-contact-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .blog-ghost-link {
   border-radius: 9999px;
   border: 1px solid var(--blog-ghost-border);

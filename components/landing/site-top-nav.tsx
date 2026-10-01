@@ -10,6 +10,7 @@ const nav = [
   { label: "GEO", href: "/#geo" },
   { label: "Кейсы", href: "/#cases" },
   { label: "Блог", href: "/blog" },
+  { label: "О нас", href: "/about" },
   { label: "Тарифы", href: "/#pricing" },
   { label: "Вопросы", href: "/#faq" },
   { label: "Контакты", href: "/#contact" },
@@ -25,8 +26,8 @@ export default function SiteTopNav() {
   const shellText = isDark ? "text-[#d8c3a0]" : "text-[#6d583a]";
   const brandTitle = isDark ? "text-[#f7eedf]" : "text-[#201910]";
   const navLink = isDark
-    ? "rounded-full px-3 py-2 text-[#c5b295] transition hover:bg-white/5 hover:text-white"
-    : "rounded-full px-3 py-2 text-[#574431] transition hover:bg-black/[0.06] hover:text-[#201910]";
+    ? "rounded-full px-2 py-1.5 text-[#c5b295] transition hover:bg-white/5 hover:text-white"
+    : "rounded-full px-2 py-1.5 text-[#574431] transition hover:bg-black/[0.06] hover:text-[#201910]";
 
   const themeButton = isDark
     ? "h-12 rounded-full border border-[#f6e5bf] bg-[linear-gradient(135deg,#fdf0cd_0%,#f2d79d_45%,#d9af68_100%)] px-7 text-[15px] font-semibold tracking-[0.01em] text-[#24180c] shadow-[0_10px_30px_rgba(222,173,96,0.38)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_36px_rgba(222,173,96,0.48)] active:translate-y-0"
@@ -51,7 +52,10 @@ export default function SiteTopNav() {
             </div>
           </Link>
 
-          <nav className="flex flex-wrap items-center gap-3 text-sm" aria-label="Основное меню">
+          <nav
+            className="flex flex-wrap items-center gap-x-1 gap-y-2 text-[13px] lg:flex-nowrap lg:gap-x-1.5 lg:text-sm"
+            aria-label="Основное меню"
+          >
             {nav.map((item) => (
               <Link key={item.label} href={item.href} className={navLink}>
                 {item.label}
@@ -59,7 +63,7 @@ export default function SiteTopNav() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2 lg:justify-end">
+          <div className="flex shrink-0 items-center gap-2 lg:justify-end">
             <Button variant="default" onClick={toggleTheme} className={themeButton}>
               {isDark ? (
                 <Sun className="mr-2 h-4 w-4" />

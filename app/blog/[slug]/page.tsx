@@ -4,12 +4,20 @@ import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import { getAllBlogPosts, getBlogPostBySlug } from "@/lib/blog";
+import { getAllBlogPosts, getBlogPostBySlug, getRelatedBlogPosts, formatBlogDate } from "@/lib/blog";
 import SiteTopNav from "@/components/landing/site-top-nav";
 import { BlogPinnedBadge } from "@/components/blog/pinned-badge";
 import { blogPageContent } from "@/content/blog/page-content";
 import { BlogTags } from "@/components/blog/blog-tags";
+import { BlogAuthor } from "@/components/blog/blog-author";
+import { BlogRelatedPosts } from "@/components/blog/blog-related-posts";
+import { BlogBreadcrumbs } from "@/components/blog/blog-breadcrumbs";
+import { BlogSources } from "@/components/blog/blog-sources";
 import { ImageLightbox } from "@/components/blog/image-lightbox";
+import { JsonLdScript } from "@/components/schema/json-ld-script";
+import { buildBlogPostingSchema, buildBlogSchema } from "@/lib/schema/site-schema";
+import { buildBreadcrumbSchema } from "@/lib/schema/breadcrumb-schema";
+import { buildPageMetadata, DEFAULT_OG_IMAGE } from "@/lib/seo/metadata-helpers";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
@@ -32,10 +40,17 @@ export async function generateMetadata({
     };
   }
 
-  return {
+  return buildPageMetadata({
     title: post.metaTitle,
     description: post.metaDescription,
-  };
+    path: `/blog/${post.slug}/`,
+    image: post.image || DEFAULT_OG_IMAGE,
+    type: "article",
+    publishedTime: post.date,
+    modifiedTime: post.dateModified,
+    authors: [post.author],
+    tags: post.tags,
+  });
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -46,15 +61,35 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
+  const breadcrumbs = [
+    { name: "Главная", path: "/" },
+    { name: "Блог", path: "/blog/" },
+    { name: post.title, path: `/blog/${post.slug}/` },
+  ];
+  const relatedPosts = getRelatedBlogPosts(slug);
+
   return (
     <main className="blog-main px-4 py-10 sm:px-6 lg:px-8">
+      <JsonLdScript
+        data={[
+          buildBlogSchema(),
+          buildBlogPostingSchema(post),
+          buildBreadcrumbSchema(breadcrumbs),
+        ]}
+      />
       <div className="mx-auto max-w-7xl">
         <SiteTopNav />
         <article className="mx-auto max-w-3xl">
+          <BlogBreadcrumbs items={breadcrumbs} />
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
             {post.pinned && <BlogPinnedBadge label={blogPageContent.pinnedLabel} />}
-            <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">Опубликовано {post.date}</p>
+            <time
+              className="blog-post-meta text-xs uppercase tracking-[0.2em]"
+              dateTime={post.date}
+            >
+              Опубликовано {formatBlogDate(post.date)}
+            </time>
           </div>
           <Link href="/blog" className="blog-ghost-link">
             Ко всем записям
@@ -62,18 +97,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
 
         <h1 className="font-serif text-4xl font-semibold leading-tight md:text-5xl">{post.title}</h1>
-
-        {post.image && (
-          <div className="my-6">
-            <img
-              src={post.image}
-              alt={post.title}
-              className="w-full rounded-xl"
-              width={1200}
-              height={630}
-            />
-          </div>
-        )}
 
         {post.tags.length > 0 && (
           <div className="mt-5">
@@ -92,11 +115,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               ul: ({ children }) => <ul>{children}</ul>,
               ol: ({ children }) => <ol>{children}</ol>,
               li: ({ children }) => <li>{children}</li>,
-              a: ({ children, href }) => (
-                <a href={href} target="_blank" rel="noreferrer">
-                  {children}
-                </a>
-              ),
+              a: ({ children, href }) => {
+                const url = String(href ?? "");
+                const isInternal = url.startsWith("/") || url.startsWith("#");
+
+                if (isInternal) {
+                  return <Link href={url}>{children}</Link>;
+                }
+
+                return (
+                  <a href={url} target="_blank" rel="noopener noreferrer">
+                    {children}
+                  </a>
+                );
+              },
               strong: ({ children }) => <strong>{children}</strong>,
               blockquote: ({ children }) => <blockquote>{children}</blockquote>,
               img: ({ src, alt }) => (
@@ -107,6 +139,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             {post.content}
           </ReactMarkdown>
         </div>
+
+        <BlogRelatedPosts posts={relatedPosts} />
+
+        <BlogAuthor authorName={post.author} />
+
+        <BlogSources sources={post.sources} />
 
         {post.tags.length > 0 && (
           <section

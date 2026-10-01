@@ -1,9 +1,10 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { TrendingUp, ArrowUpRight } from "lucide-react";
+import { casesItems } from "@/content/landing/cases-items";
 
 type Props = {
   darkMode?: boolean;
@@ -25,61 +26,10 @@ export default function CasesSection({ darkMode = true }: Props) {
         badge: "bg-[#f0dfb4] text-[#5d4828] hover:bg-[#f0dfb4]",
       };
 
-  const cases = [
-    {
-      title: "Как мы увеличили заявки для сервиса доставки цветов",
-      niche: "Услуги для бизнеса",
-      result: "+160% посетителей из поиска за полгода",
-      text: "Клиент получал заявки неравномерно. Мы разобрались, как ищут их услуги, переделали главную страницу сайта и сделали так, чтобы поток клиентов из поиска стал стабильным.",
-      projectUrl: "https://art-web.ru/index.php?id=pro-emocii_rf",
-    },
-    {
-      title: "Как нейросети стали рекомендовать наш IT-продукт",
-      niche: "SaaS / IT-продукт",
-      result: "Бренд чаще появляется в ответах нейросетей",
-      text: "Чётко описали, чем занимается наша веб-студия, добавили реальные примеры работ и экспертные статьи. Теперь нейросети чаще предлагают наш бренд art-web.ru пользователям.",
-      modalImages: ["/img/best-web.jpg", "/img/best-rank.jpg"],
-    },
-    {
-      title: "Как мы исправили сайт после неудачного продвижения",
-      niche: "Интернет-магазин кровли",
-      result: "Больше целевых посетителей на важных страницах",
-      text: "Сайт плохо индексировался поисковиками. Мы навели технический порядок, сделали редизайн, ускорили загрузку и создали понятную структуру. Посетители стали чаще оставлять заявки и покупать.",
-      projectUrl: "https://art-web.ru/index.php?id=crimea-partner",
-    },
-  ];
-
-  // Генерация JSON-LD микроразметки для кейсов
-  const casesSchema = useMemo(
-    () => ({
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Примеры наших проектов",
-      "description": "Реальные результаты наших клиентов: задачи, решения и измеримые цифры.",
-      "itemListElement": cases.map((item, index) => ({
-        "@type": "Article",
-        "position": index + 1,
-        "headline": item.title,
-        "description": item.text,
-        "articleSection": "Кейс",
-        "keywords": ["продвижение сайта", "SEO", "результаты клиентов"],
-        "about": {
-          "@type": "Thing",
-          "name": item.niche,
-        },
-      })),
-    }),
-    []
-  );
+  const cases = casesItems;
 
   return (
     <section className="pb-16" id="cases">
-      {/* Микроразметка для поисковых систем */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(casesSchema) }}
-      />
-
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <div className={`text-xs uppercase tracking-[0.28em] ${theme.subtext}`}>

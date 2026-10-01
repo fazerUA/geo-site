@@ -5,6 +5,8 @@ excerpt: "Сегодня я расскажу вам об одной хитрос
 metaTitle: "Как заставить нейросети и поисковики рекомендовать ваш бизнес"
 metaDescription: "Сегодня я расскажу вам об одной хитрости, которая звучит как магия, но на деле — чистая психология. Только психология не людей, а поисковых роботов."
 tags: SEO, GEO, UX, нейросети
+author: Леонид К.
+sources: Schema.org LocalBusiness|https://schema.org/LocalBusiness, Google structured data intro|https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data, Schema.org JSON-LD|https://schema.org/docs/datamodel.html
 ---
 
 ![Секрет невидимых чернил для нейросетей](/img/nevidimie-chernila-v-geo.webp)

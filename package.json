@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\" && next dev",
+    "prebuild": "npx --yes tsx lib/llms/run-write-llms.ts",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "new:post": "npx --yes tsx lib/blog/run-create-post.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",

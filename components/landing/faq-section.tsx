@@ -1,7 +1,7 @@
 "use client";
-import { useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { faqItems } from "@/content/landing/faq-items";
 
 type Props = {
   darkMode?: boolean;
@@ -20,45 +20,8 @@ export default function FaqSection({ darkMode = true }: Props) {
         card: "border-[#d7c4a0] bg-[#fff9ee]",
       };
 
-  const items = [
-    {
-      q: "Что происходит после того, как я оставлю заявку?",
-      a: "Сначала коротко созвонимся, обсудим ваши цели и посмотрим текущие показатели сайта. После этого составим пошаговый план на 1–3 месяца. Вы сразу будете знать, какие задачи мы берём в работу и какой результат ожидать.",
-    },
-    {
-      q: "Зачем продвигаться и в поиске, и через нейросети?",
-      a: "Обычный поиск приводит клиентов, которые уже ищут вашу услугу. Нейросети (ChatGPT, Алиса и др.) помогают вашему бренду появляться в рекомендациях даже тем, кто только формирует запрос. Вместе это даёт больше обращений и укрепляет доверие к компании.",
-    },
-    {
-      q: "Когда появятся первые заявки?",
-      a: "Первые изменения обычно заметны через 1–2 месяца: сайт начинает чаще появляться в поиске, а посетители становятся более целевыми. Стабильный поток заявок формируется постепенно, по мере того как мы добавляем контент и улучшаем структуру сайта.",
-    },
-    {
-      q: "Как я буду видеть прогресс работы?",
-      a: "Мы отправляем простые отчёты с понятными цифрами: сколько людей зашло на сайт, сколько оставило заявок и как изменились позиции. На регулярных встречах обсуждаем только то, что действительно помогает увеличивать продажи, без лишней технической информации.",
-    },
-  ];
-
-  const faqSchema = useMemo(() => ({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": items.map((item) => ({
-      "@type": "Question",
-      "name": item.q,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.a,
-      },
-    })),
-  }), []);
-
   return (
     <section className="pb-16">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-
       <div className="mb-6 max-w-2xl">
         <div className={`text-xs uppercase tracking-[0.28em] ${theme.subtext}`}>
           частые вопросы
@@ -73,7 +36,7 @@ export default function FaqSection({ darkMode = true }: Props) {
       </div>
 
       <div className="space-y-4">
-        {items.map((item, index) => (
+        {faqItems.map((item, index) => (
           <motion.div
             key={item.q}
             initial={{ opacity: 0, y: 16 }}

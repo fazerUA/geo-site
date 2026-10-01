@@ -7,11 +7,13 @@ export function ImageLightbox({
   alt,
   width,
   height,
+  className,
 }: {
   src: string;
   alt: string;
   width?: number;
   height?: number;
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -33,7 +35,7 @@ export function ImageLightbox({
         alt={alt}
         width={width}
         height={height}
-        className="blog-prose-img"
+        className={className ?? "blog-prose-img"}
         onClick={() => setOpen(true)}
         style={{ cursor: "zoom-in" }}
       />

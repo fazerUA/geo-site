@@ -5,9 +5,12 @@ date: "2026-05-02"
 excerpt: "Разбираем, как связать классическое SEO и AI-поиск в единую систему роста, чтобы получать не просто трафик, а заявки."
 metaTitle: "Как выбрать стратегию SEO + GEO в 2026 году"
 metaDescription: "Практический подход к объединению SEO и GEO: структура, контент, сигналы доверия и фокус на заявки."
+image: /img/geo-rabotaet-tablitsa.webp
+author: Леонид К.
+sources: Google SEO Starter Guide|https://developers.google.com/search/docs/fundamentals/seo-starter-guide, Schema.org Organization|https://schema.org/Organization, Google structured data intro|https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data
 ---
 
-SEO и GEO уже нельзя рассматривать как отдельные каналы. В 2026 году выигрывают проекты, где классический поиск и AI-ответы работают вместе.
+SEO и GEO уже нельзя рассматривать как отдельные каналы. В 2026 году выигрывают проекты, где [классический поиск](/#seo) и [AI-ответы](/#geo) работают вместе.
 
 ## С чего начать
 

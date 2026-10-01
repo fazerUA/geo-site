@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { sendLeadRequest } from "@/lib/send-lead-request";
+import {
+  getInvalidLeadFormFields,
+  type LeadFormFieldName,
+} from "@/lib/lead-form-validation";
 
 type Props = {
   darkMode?: boolean;
@@ -19,12 +23,22 @@ type SubmitStatus =
 
 export default function LeadFormSection({ darkMode = true }: Props) {
   const [status, setStatus] = useState<SubmitStatus>({ kind: "idle" });
+  const [invalidFields, setInvalidFields] = useState<LeadFormFieldName[]>([]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (status.kind === "pending") return;
 
     const form = event.currentTarget;
+    const invalid = getInvalidLeadFormFields(form);
+
+    if (invalid.length > 0) {
+      setInvalidFields(invalid);
+      setStatus({ kind: "idle" });
+      return;
+    }
+
+    setInvalidFields([]);
     setStatus({ kind: "pending" });
 
     const result = await sendLeadRequest(
@@ -47,6 +61,8 @@ export default function LeadFormSection({ darkMode = true }: Props) {
         card: "border-[#4b3922] bg-[#1f1711]",
         input:
           "border-[#4a3926] bg-[#16120f] text-[#f7eedf] placeholder:text-[#8f7a5b]",
+        inputError:
+          "border-[#d46a45] ring-2 ring-[#d46a45]/35 placeholder:text-[#c58a72]",
         button:
           "h-12 rounded-full border border-[#f6e5bf] bg-[linear-gradient(135deg,#fdf0cd_0%,#f2d79d_45%,#d9af68_100%)] px-7 text-[15px] font-semibold tracking-[0.01em] text-[#24180c] shadow-[0_10px_30px_rgba(222,173,96,0.38)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_36px_rgba(222,173,96,0.48)] active:translate-y-0",
       }
@@ -56,9 +72,20 @@ export default function LeadFormSection({ darkMode = true }: Props) {
         card: "border-[#d7c4a0] bg-[#fff9ee]",
         input:
           "border-[#ccb487] bg-[#fffdf7] text-[#201910] placeholder:text-[#8a7250]",
+        inputError:
+          "border-[#c45a30] ring-2 ring-[#c45a30]/30 placeholder:text-[#a86a45]",
         button:
           "h-12 rounded-full border border-[#2a2016] bg-[linear-gradient(135deg,#2a2016_0%,#3a2b19_48%,#5b4020_100%)] px-7 text-[15px] font-semibold tracking-[0.01em] text-[#fbf7ee] shadow-[0_10px_24px_rgba(41,30,18,0.26)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(41,30,18,0.34)] active:translate-y-0",
       };
+
+  const fieldClass = (name: LeadFormFieldName) =>
+    `${theme.input} ${invalidFields.includes(name) ? theme.inputError : ""}`;
+
+  const clearFieldError = (name: LeadFormFieldName) => {
+    if (invalidFields.includes(name)) {
+      setInvalidFields((prev) => prev.filter((field) => field !== name));
+    }
+  };
 
   return (
     <section className="pb-16">
@@ -119,48 +146,77 @@ export default function LeadFormSection({ darkMode = true }: Props) {
               <div className="grid gap-4 md:grid-cols-2">
                 <input
                   name="name"
-                  className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                  className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("name")}`}
                   placeholder="Ваше имя"
                   required
+                  aria-invalid={invalidFields.includes("name")}
+                  onChange={() => clearFieldError("name")}
                 />
                 <input
                   name="email"
                   type="email"
-                  className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                  className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("email")}`}
                   placeholder="Рабочая почта"
                   required
+                  aria-invalid={invalidFields.includes("email")}
+                  onChange={() => clearFieldError("email")}
                 />
                 <input
                   name="site"
-                  className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                  className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("site")}`}
                   placeholder="Сайт или бренд"
+                  required
+                  aria-invalid={invalidFields.includes("site")}
+                  onChange={() => clearFieldError("site")}
                 />
                 <input
                   name="budget"
-                  className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                  className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("budget")}`}
                   placeholder="Диапазон месячного бюджета"
+                  required
+                  aria-invalid={invalidFields.includes("budget")}
+                  onChange={() => clearFieldError("budget")}
                 />
               </div>
 
               <div className="mt-4 grid gap-4 md:grid-cols-2">
                 <input
                   name="goal"
-                  className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                  className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("goal")}`}
                   placeholder="Основная цель"
+                  required
+                  aria-invalid={invalidFields.includes("goal")}
+                  onChange={() => clearFieldError("goal")}
                 />
                 <input
                   name="timeline"
-                  className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                  className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("timeline")}`}
                   placeholder="Сроки"
+                  required
+                  aria-invalid={invalidFields.includes("timeline")}
+                  onChange={() => clearFieldError("timeline")}
                 />
               </div>
 
               <textarea
                 name="details"
-                className={`mt-4 min-h-[150px] w-full rounded-[24px] border px-4 py-3 outline-none ${theme.input}`}
+                className={`mt-4 min-h-[150px] w-full rounded-[24px] border px-4 py-3 outline-none ${fieldClass("details")}`}
                 placeholder="Расскажите о проекте, текущей ситуации, целях, географии, рынке и формате поддержки, который вам нужен."
                 required
+                aria-invalid={invalidFields.includes("details")}
+                onChange={() => clearFieldError("details")}
               />
+
+              {invalidFields.length > 0 ? (
+                <p
+                  className={`mt-4 text-sm leading-6 ${
+                    darkMode ? "text-[#f1c69a]" : "text-[#a35a30]"
+                  }`}
+                  role="alert"
+                >
+                  Заполните все поля формы — незаполненные подсвечены.
+                </p>
+              ) : null}
 
               <AnimatePresence mode="wait" initial={false}>
                 {status.kind === "success" ? (

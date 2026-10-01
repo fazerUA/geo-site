@@ -5,6 +5,9 @@ date: "2026-05-12"
 excerpt: "Коротко: Да, работает. Но правила изменились. Как именно - читайте в статье"
 metaTitle: "Работает ли продвижение через ИИ в 2026 году?"
 metaDescription: "Раньше вы вешали вывеску на оживлённой улице (поиск). Теперь нужно, чтобы ваш совет давал местный эксперт, к которому все прислушиваются (нейросеть). Задача — стать этим «экспертом» в глазах ИИ."
+pinned: true
+author: Леонид К.
+sources: Google AI features in Search|https://developers.google.com/search/docs/appearance/ai-features, Perplexity|https://www.perplexity.ai/, Яндекс с Алисой|https://ya.ru/ai
 ---
 
 **Коротко:** Да, работает. Но правила изменились.

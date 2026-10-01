@@ -3,13 +3,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   formatBlogTag,
+  formatBlogDate,
   getAllBlogTags,
   getBlogPostsByTagSlug,
   getBlogTagBySlug,
 } from "@/lib/blog";
 import SiteTopNav from "@/components/landing/site-top-nav";
 import { BlogPinnedBadge } from "@/components/blog/pinned-badge";
+import { BlogBreadcrumbs } from "@/components/blog/blog-breadcrumbs";
 import { blogPageContent } from "@/content/blog/page-content";
+import { JsonLdScript } from "@/components/schema/json-ld-script";
+import { buildBreadcrumbSchema } from "@/lib/schema/breadcrumb-schema";
+import { buildPageMetadata } from "@/lib/seo/metadata-helpers";
 
 type BlogTagPageProps = {
   params: Promise<{ tag: string }>;
@@ -32,10 +37,11 @@ export async function generateMetadata({ params }: BlogTagPageProps): Promise<Me
 
   const label = formatBlogTag(tagEntry.tag);
 
-  return {
+  return buildPageMetadata({
     title: `${blogPageContent.tagPageHeadingPrefix} ${label}`,
     description: `Статьи блога с ярлыком ${label}.`,
-  };
+    path: `/blog/tag/${tagSlug}/`,
+  });
 }
 
 export default async function BlogTagPage({ params }: BlogTagPageProps) {
@@ -48,12 +54,19 @@ export default async function BlogTagPage({ params }: BlogTagPageProps) {
 
   const posts = getBlogPostsByTagSlug(tagSlug);
   const label = formatBlogTag(tagEntry.tag);
+  const breadcrumbs = [
+    { name: "Главная", path: "/" },
+    { name: "Блог", path: "/blog/" },
+    { name: label, path: `/blog/tag/${tagSlug}/` },
+  ];
 
   return (
     <main className="blog-main px-4 py-10 sm:px-6 lg:px-8">
+      <JsonLdScript data={buildBreadcrumbSchema(breadcrumbs)} />
       <div className="mx-auto max-w-7xl">
         <SiteTopNav />
         <div className="mx-auto max-w-4xl">
+          <BlogBreadcrumbs items={breadcrumbs} />
           <div className="mb-8">
             <p className="blog-eyebrow text-xs uppercase tracking-[0.28em]">
               {blogPageContent.tagPageEyebrow}
@@ -83,10 +96,14 @@ export default async function BlogTagPage({ params }: BlogTagPageProps) {
                   {post.pinned ? (
                     <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                       <BlogPinnedBadge label={blogPageContent.pinnedLabel} />
-                      <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">{post.date}</p>
+                      <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">
+                        {formatBlogDate(post.date)}
+                      </p>
                     </div>
                   ) : (
-                    <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">{post.date}</p>
+                    <p className="blog-post-meta text-xs uppercase tracking-[0.2em]">
+                      {formatBlogDate(post.date)}
+                    </p>
                   )}
                   <h2 className="mt-3 text-2xl font-semibold">{post.title}</h2>
                   <p className="blog-lead mt-3 leading-7">{post.excerpt}</p>

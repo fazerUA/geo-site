@@ -222,7 +222,7 @@ export default function BashLanding() {
     : "group relative inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-[#2a2016] bg-[linear-gradient(135deg,#2a2016_0%,#3a2b19_48%,#5b4020_100%)] text-[#fbf7ee] shadow-[0_10px_24px_rgba(41,30,18,0.3)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(41,30,18,0.42)]";
 
   return (
-    <div
+    <main
       className={`min-h-screen overflow-x-clip transition-colors duration-500 ${theme.page}`}
     >
       <div className={`absolute inset-0 ${theme.overlay}`} />
@@ -789,9 +789,14 @@ export default function BashLanding() {
                 />
 
                 <div className="flex flex-col-reverse items-start justify-between gap-4 sm:flex-row sm:items-center">
-                  <p className={`text-xs ${theme.muted}`}>
-                    © {new Date().getFullYear()} ИП Григорьев А. А. Все права защищены.
-                  </p>
+                  <div className={`flex flex-col gap-2 text-xs ${theme.muted}`}>
+                    <p>
+                      © {new Date().getFullYear()} ИП Григорьев А. А. Все права защищены.
+                    </p>
+                    <Link href="/privacy/" className={`underline underline-offset-2 ${theme.muted}`}>
+                      Политика конфиденциальности
+                    </Link>
+                  </div>
                   <div className="flex items-center gap-2">
                     {messengerLinks.map((item) => {
                       const Icon = item.icon;
@@ -880,6 +885,6 @@ export default function BashLanding() {
           </div>
         ) : null}
       </div>
-    </div>
+    </main>
   );
 }

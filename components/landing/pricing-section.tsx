@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,11 @@ import {
   Loader2,
 } from "lucide-react";
 import { sendLeadRequest } from "@/lib/send-lead-request";
+import {
+  getInvalidLeadFormFields,
+  type LeadFormFieldName,
+} from "@/lib/lead-form-validation";
+import { pricingPlans } from "@/content/landing/pricing-plans";
 
 type Props = {
   darkMode?: boolean;
@@ -25,10 +30,12 @@ type SubmitStatus =
 export default function PricingSection({ darkMode = true }: Props) {
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const [status, setStatus] = useState<SubmitStatus>({ kind: "idle" });
+  const [invalidFields, setInvalidFields] = useState<LeadFormFieldName[]>([]);
 
   const closeModal = () => {
     setIsLeadModalOpen(false);
     setStatus({ kind: "idle" });
+    setInvalidFields([]);
   };
 
   const handleLeadModalSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -36,6 +43,15 @@ export default function PricingSection({ darkMode = true }: Props) {
     if (status.kind === "pending") return;
 
     const form = event.currentTarget;
+    const invalid = getInvalidLeadFormFields(form);
+
+    if (invalid.length > 0) {
+      setInvalidFields(invalid);
+      setStatus({ kind: "idle" });
+      return;
+    }
+
+    setInvalidFields([]);
     setStatus({ kind: "pending" });
 
     const result = await sendLeadRequest(
@@ -59,6 +75,8 @@ export default function PricingSection({ darkMode = true }: Props) {
         modalCard: "border-[#4b3922] bg-[#1f1711]",
         input:
           "border-[#4a3926] bg-[#16120f] text-[#f7eedf] placeholder:text-[#8f7a5b]",
+        inputError:
+          "border-[#d46a45] ring-2 ring-[#d46a45]/35 placeholder:text-[#c58a72]",
         badge: "bg-[#f0d39f] text-[#1b140d] hover:bg-[#f0d39f]",
         button:
           "h-12 rounded-full border border-[#f6e5bf] bg-[linear-gradient(135deg,#fdf0cd_0%,#f2d79d_45%,#d9af68_100%)] px-7 text-[15px] font-semibold tracking-[0.01em] text-[#24180c] shadow-[0_10px_30px_rgba(222,173,96,0.38)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_36px_rgba(222,173,96,0.48)] active:translate-y-0",
@@ -73,6 +91,8 @@ export default function PricingSection({ darkMode = true }: Props) {
         modalCard: "border-[#d7c4a0] bg-[#fff9ee]",
         input:
           "border-[#ccb487] bg-[#fffdf7] text-[#201910] placeholder:text-[#8a7250]",
+        inputError:
+          "border-[#c45a30] ring-2 ring-[#c45a30]/30 placeholder:text-[#a86a45]",
         badge: "bg-[#2a2016] text-[#fbf7ee] hover:bg-[#2a2016]",
         button:
           "h-12 rounded-full border border-[#2a2016] bg-[linear-gradient(135deg,#2a2016_0%,#3a2b19_48%,#5b4020_100%)] px-7 text-[15px] font-semibold tracking-[0.01em] text-[#fbf7ee] shadow-[0_10px_24px_rgba(41,30,18,0.26)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(41,30,18,0.34)] active:translate-y-0",
@@ -80,85 +100,19 @@ export default function PricingSection({ darkMode = true }: Props) {
           "border-[#b89a65] bg-transparent text-[#4f3b22] hover:bg-[#f4ead0]",
       };
 
-  const plans = [
-    {
-      name: "Старт",
-      price: "₽25000 / месяц",
-      priceValue: 25000, // Для корректной микроразметки. Замените на реальную цифру.
-      label: "Для небольших проектов и ИП",
-      featured: false,
-      features: [
-        "Проверка сайта и анализ текущих текстов",
-        "Чёткий пошаговый план на первый месяц",
-        "Настройка главных страниц, которые ищут клиенты",
-        "Понятный ежемесячный отчёт о результатах",
-      ],
-    },
-    {
-      name: "Рост",
-      price: "₽60000 / месяц",
-      priceValue: 60000, // Замените на реальную цифру.
-      label: "Выбирают чаще всего",
-      featured: true,
-      features: [
-        "Тариф «Старт» +",
-        "Комплексное продвижение в поиске и нейросетях",
-        "План публикаций и создание страниц под запросы",
-        "Постоянные улучшения для увеличения числа заявок",
-        "Еженедельные встречи и отчёты по важным показателям",
-      ],
-    },
-    {
-      name: "Масштаб",
-      price: "Индивидуально",
-      priceValue: 0,
-      label: "Для крупных компаний и сетей",
-      featured: false,
-      features: [
-        "Продвижение в нескольких городах и странах",
-        "Индивидуальная стратегия под ваши каналы продаж",
-        "Работа над репутацией и узнаваемостью бренда",
-        "Прямая работа с руководителями и директорами по маркетингу",
-      ],
-    },
-  ];
+  const fieldClass = (name: LeadFormFieldName) =>
+    `${theme.input} ${invalidFields.includes(name) ? theme.inputError : ""}`;
 
-  // Генерация JSON-LD микроразметки для тарифов
-  const pricingSchema = useMemo(
-    () => ({
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Тарифы на продвижение",
-      "description":
-        "Выберите подходящий формат сотрудничества для роста заявок и выручки.",
-      "itemListElement": plans.map((plan, index) => ({
-        "@type": "Service",
-        "position": index + 1,
-        "name": plan.name,
-        "description": plan.features.join(". "),
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "RUB", // Замените на USD или другую валюту при необходимости
-          "price": plan.price.toLowerCase().includes("индивидуально")
-            ? "0"
-            : plan.priceValue || "0",
-          "priceValidUntil": "2026-12-31",
-          "availability": "https://schema.org/InStock",
-          "url": "#pricing",
-        },
-      })),
-    }),
-    []
-  );
+  const clearFieldError = (name: LeadFormFieldName) => {
+    if (invalidFields.includes(name)) {
+      setInvalidFields((prev) => prev.filter((field) => field !== name));
+    }
+  };
+
+  const plans = pricingPlans;
 
   return (
     <section className="pb-16" id="pricing">
-      {/* Микроразметка для поисковых систем */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingSchema) }}
-      />
-
       <div className="mb-6 max-w-2xl">
         <div className={`text-xs uppercase tracking-[0.28em] ${theme.subtext}`}>
           тарифы и цены
@@ -287,48 +241,77 @@ export default function PricingSection({ darkMode = true }: Props) {
                 <div className="grid gap-4 md:grid-cols-2">
                   <input
                     name="name"
-                    className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                    className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("name")}`}
                     placeholder="Ваше имя"
                     required
+                    aria-invalid={invalidFields.includes("name")}
+                    onChange={() => clearFieldError("name")}
                   />
                   <input
                     name="email"
                     type="email"
-                    className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                    className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("email")}`}
                     placeholder="Рабочая почта"
                     required
+                    aria-invalid={invalidFields.includes("email")}
+                    onChange={() => clearFieldError("email")}
                   />
                   <input
                     name="site"
-                    className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                    className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("site")}`}
                     placeholder="Сайт или бренд"
+                    required
+                    aria-invalid={invalidFields.includes("site")}
+                    onChange={() => clearFieldError("site")}
                   />
                   <input
                     name="budget"
-                    className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                    className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("budget")}`}
                     placeholder="Диапазон месячного бюджета"
+                    required
+                    aria-invalid={invalidFields.includes("budget")}
+                    onChange={() => clearFieldError("budget")}
                   />
                 </div>
 
                 <div className="mt-4 grid gap-4 md:grid-cols-2">
                   <input
                     name="goal"
-                    className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                    className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("goal")}`}
                     placeholder="Основная цель"
+                    required
+                    aria-invalid={invalidFields.includes("goal")}
+                    onChange={() => clearFieldError("goal")}
                   />
                   <input
                     name="timeline"
-                    className={`h-12 rounded-2xl border px-4 outline-none ${theme.input}`}
+                    className={`h-12 rounded-2xl border px-4 outline-none ${fieldClass("timeline")}`}
                     placeholder="Сроки"
+                    required
+                    aria-invalid={invalidFields.includes("timeline")}
+                    onChange={() => clearFieldError("timeline")}
                   />
                 </div>
 
                 <textarea
                   name="details"
-                  className={`mt-4 min-h-[150px] w-full rounded-[24px] border px-4 py-3 outline-none ${theme.input}`}
+                  className={`mt-4 min-h-[150px] w-full rounded-[24px] border px-4 py-3 outline-none ${fieldClass("details")}`}
                   placeholder="Расскажите о проекте, текущей ситуации, целях, географии, рынке и формате поддержки, который вам нужен."
                   required
+                  aria-invalid={invalidFields.includes("details")}
+                  onChange={() => clearFieldError("details")}
                 />
+
+                {invalidFields.length > 0 ? (
+                  <p
+                    className={`mt-4 text-sm leading-6 ${
+                      darkMode ? "text-[#f1c69a]" : "text-[#a35a30]"
+                    }`}
+                    role="alert"
+                  >
+                    Заполните все поля формы — незаполненные подсвечены.
+                  </p>
+                ) : null}
 
                 <AnimatePresence mode="wait" initial={false}>
                   {status.kind === "success" ? (

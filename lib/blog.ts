@@ -1,10 +1,19 @@
 import fs from "node:fs";
 import path from "node:path";
 
+import matter from "gray-matter";
+
+import {
+  formatIsoDate,
+  resolveFrontmatter,
+  type BlogFrontmatterInput,
+} from "@/lib/blog/frontmatter-helpers";
+
 export type BlogPost = {
   slug: string;
   title: string;
   date: string;
+  dateModified: string;
   excerpt: string;
   metaTitle: string;
   metaDescription: string;
@@ -12,6 +21,13 @@ export type BlogPost = {
   pinned: boolean;
   tags: string[];
   image?: string;
+  author: string;
+  sources: BlogSource[];
+};
+
+export type BlogSource = {
+  title: string;
+  url: string;
 };
 
 export type BlogTagEntry = {
@@ -20,16 +36,7 @@ export type BlogTagEntry = {
   count: number;
 };
 
-type BlogFrontmatter = {
-  title?: string;
-  date?: string;
-  excerpt?: string;
-  metaTitle?: string;
-  metaDescription?: string;
-  pinned?: string;
-  tags?: string;
-  image?: string;
-};
+type BlogFrontmatter = BlogFrontmatterInput;
 
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 
@@ -45,6 +52,17 @@ export function formatBlogTag(tag: string): string {
 export function tagToSlug(tag: string): string {
   const normalized = normalizeBlogTag(tag);
   return encodeURIComponent(normalized.replace(/\s+/g, "-").toLowerCase());
+}
+
+/** Формат даты для блога: день-месяц-год (12-05-2026). */
+export function formatBlogDate(date: string): string {
+  const match = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) {
+    return date;
+  }
+
+  const [, year, month, day] = match;
+  return `${day}-${month}-${year}`;
 }
 
 function parseTags(raw?: string): string[] {
@@ -77,53 +95,151 @@ function parseTags(raw?: string): string[] {
     });
 }
 
-function stripQuotes(value: string): string {
-  const trimmed = value.trim();
-  if (
-    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
-    (trimmed.startsWith("'") && trimmed.endsWith("'"))
-  ) {
-    return trimmed.slice(1, -1);
+function parseSources(raw?: string): BlogSource[] {
+  if (!raw?.trim()) {
+    return [];
   }
 
-  return trimmed;
+  return raw
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const [title, url] = entry.split("|").map((piece) => piece.trim());
+      if (title && url) {
+        return { title, url };
+      }
+
+      return { title: url || title, url: url || title };
+    })
+    .filter((source) => source.url.startsWith("http"));
+}
+
+function frontmatterValueToString(value: unknown): string | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  if (value instanceof Date) {
+    return formatIsoDate(value);
+  }
+
+  return String(value);
 }
 
 function parseFrontmatter(rawFile: string): { data: BlogFrontmatter; content: string } {
-  const normalized = rawFile.replace(/\r\n/g, "\n");
-  const match = normalized.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
-
-  if (!match) {
-    return { data: {}, content: normalized.trim() };
-  }
-
-  const [, frontmatterBlock, content] = match;
+  const { data: rawData, content } = matter(rawFile.replace(/\r\n/g, "\n"));
   const data: BlogFrontmatter = {};
 
-  for (const line of frontmatterBlock.split("\n")) {
-    if (!line.trim()) {
-      continue;
+  for (const [key, value] of Object.entries(rawData)) {
+    const normalized = frontmatterValueToString(value);
+    if (normalized !== undefined) {
+      data[key as keyof BlogFrontmatter] = normalized;
     }
-
-    const separatorIndex = line.indexOf(":");
-    if (separatorIndex === -1) {
-      continue;
-    }
-
-    const key = line.slice(0, separatorIndex).trim() as keyof BlogFrontmatter;
-    const value = stripQuotes(line.slice(separatorIndex + 1));
-    data[key] = value;
   }
 
   return { data, content: content.trim() };
 }
 
-function validateFrontmatter(data: BlogFrontmatter, slug: string) {
-  if (!data.title || !data.date || !data.excerpt || !data.metaTitle || !data.metaDescription) {
-    throw new Error(
-      `Проверьте frontmatter в статье "${slug}.md": обязательны title, date, excerpt, metaTitle, metaDescription.`
-    );
+function validateFrontmatter(data: BlogFrontmatter, slug: string, filePath: string) {
+  resolveFrontmatter(data, slug, filePath);
+}
+
+function stripReadAlsoSection(content: string): string {
+  return content.replace(/\n##\s*Читайте также[\s\S]*$/iu, "").trim();
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Убирает повтор заголовка в теле: H1 и alt обложки совпадающий с title. */
+function normalizeBlogContent(content: string, title: string): string {
+  let result = content.trim();
+  const normalizedTitle = title.trim();
+
+  if (!normalizedTitle) {
+    return result;
   }
+
+  const titlePattern = new RegExp(
+    `^#\\s+${escapeRegExp(normalizedTitle)}\\s*(?:\\n|$)`,
+    "u"
+  );
+  result = result.replace(titlePattern, "").trimStart();
+
+  const coverAltPattern = new RegExp(
+    `!\\[${escapeRegExp(normalizedTitle)}\\]\\(([^)]+)\\)`,
+    "gu"
+  );
+  result = result.replace(coverAltPattern, "![]($1)");
+
+  return result;
+}
+
+export function extractFirstImageFromMarkdown(content: string): string | undefined {
+  const markdownImage = content.match(/!\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/);
+  if (markdownImage?.[1]) {
+    return markdownImage[1];
+  }
+
+  const htmlImage = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return htmlImage?.[1];
+}
+
+export function resolvePostImage(input: {
+  image?: string;
+  content: string;
+}): string | undefined {
+  const fromFrontmatter = input.image?.trim();
+  if (fromFrontmatter) {
+    return fromFrontmatter;
+  }
+
+  return extractFirstImageFromMarkdown(input.content);
+}
+
+export function getRelatedBlogPosts(currentSlug: string, limit = 3): BlogPost[] {
+  const current = getBlogPostBySlug(currentSlug);
+  if (!current) {
+    return [];
+  }
+
+  const candidates = getAllBlogPosts().filter((post) => post.slug !== currentSlug);
+  const currentTags = new Set(current.tags.map((tag) => tag.toLowerCase()));
+
+  const scored = candidates
+    .map((post) => ({
+      post,
+      score: post.tags.filter((tag) => currentTags.has(tag.toLowerCase())).length,
+    }))
+    .sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+
+      return new Date(b.post.date).getTime() - new Date(a.post.date).getTime();
+    });
+
+  const related = scored.filter((entry) => entry.score > 0).map((entry) => entry.post);
+
+  if (related.length >= limit) {
+    return related.slice(0, limit);
+  }
+
+  const used = new Set(related.map((post) => post.slug));
+  for (const post of candidates) {
+    if (related.length >= limit) {
+      break;
+    }
+
+    if (!used.has(post.slug)) {
+      related.push(post);
+      used.add(post.slug);
+    }
+  }
+
+  return related.slice(0, limit);
 }
 
 export function getAllBlogPosts(): BlogPost[] {
@@ -137,22 +253,31 @@ export function getAllBlogPosts(): BlogPost[] {
     const slug = fileName.replace(/\.md$/, "");
     const fullPath = path.join(BLOG_DIR, fileName);
     const rawFile = fs.readFileSync(fullPath, "utf8");
-    const { data, content } = parseFrontmatter(rawFile);
+    const { data, content: rawContent } = parseFrontmatter(rawFile);
     const frontmatter = data as BlogFrontmatter;
 
-    validateFrontmatter(frontmatter, slug);
+    validateFrontmatter(frontmatter, slug, fullPath);
+
+    const resolved = resolveFrontmatter(frontmatter, slug, fullPath);
+    const content = normalizeBlogContent(
+      stripReadAlsoSection(rawContent.trim()),
+      resolved.title
+    );
 
     return {
       slug,
-      title: frontmatter.title!,
-      date: frontmatter.date!,
-      excerpt: frontmatter.excerpt!,
-      metaTitle: frontmatter.metaTitle!,
-      metaDescription: frontmatter.metaDescription!,
-      content: content.trim(),
-      pinned: frontmatter.pinned === "true",
-      tags: parseTags(frontmatter.tags),
-      image: frontmatter.image || undefined,
+      title: resolved.title,
+      date: resolved.date,
+      dateModified: resolved.updated || resolved.date,
+      excerpt: resolved.excerpt,
+      metaTitle: resolved.metaTitle,
+      metaDescription: resolved.metaDescription,
+      content,
+      pinned: resolved.pinned,
+      tags: parseTags(resolved.tags),
+      image: resolvePostImage({ image: resolved.image, content }),
+      author: resolved.author,
+      sources: parseSources(resolved.sources),
     };
   });
 
