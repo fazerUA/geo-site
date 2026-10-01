@@ -1,0 +1,15 @@
+stages:
+  - verify
+
+default:
+  image: node:22-bookworm
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+
+verify:
+  stage: verify
+  script:
+    - npm ci
+    - npm run lint

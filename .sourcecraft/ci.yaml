@@ -1,20 +1,37 @@
-# Проверка сборки при push. Деплой на хостинг — вручную (см. docs/MANUAL-DEPLOY.md).
+# SourceCraft CI wrapper — GitLab pipeline (сборка Next.js + rsync на Beget).
+# Docs: https://sourcecraft.dev/portal/docs/en/sourcecraft/operations/gl-pipelines.md
+# Фильтр веток здесь; в GitLab jobs не проверять CI_COMMIT_BRANCH
+# (SourceCraft checkout detached SHA — иначе build/deploy не запустятся).
 
 on:
   push:
-    - workflows: verify-build
+    - workflows: [deploy]
       filter:
-        branches: ["main", "master"]
+        branches: ["main"]
+
+  pull_request:
+    - workflows: [verify]
+      filter:
+        source_branches: ["**"]
+        target_branches: ["main"]
 
 workflows:
-  verify-build:
-    settings:
-      max_cube_duration: 30m
+  deploy:
     tasks:
-      - name: build
+      - name: pipeline
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         cubes:
-          - name: npm-build
-            image: docker.io/library/node:22-bookworm
-            script:
-              - npm ci
-              - npm run build
+          - name: gitlab
+            gitlab_workflow: .sourcecraft/.gitlab-ci.yaml
+
+  verify:
+    tasks:
+      - name: pipeline
+        cubes:
+          - name: gitlab
+            gitlab_workflow: .sourcecraft/.gitlab-ci.verify.yaml

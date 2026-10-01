@@ -1,0 +1,94 @@
+# Decap CMS — правки попадают в git (backend ниже). См. docs/DECAP-ADMIN.md
+backend:
+  name: github
+  repo: fazerUA/geo-site
+  branch: main
+  open_authoring: false
+
+media_folder: public/img
+public_folder: /img
+
+site_url: https://art-web-geo.ru
+display_url: https://art-web-geo.ru
+locale: ru
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+  - name: blog
+    label: Блог
+    label_singular: Статья
+    folder: content/blog
+    path: "{{slug}}"
+    create: true
+    delete: false
+    extension: md
+    format: yaml-frontmatter
+    slug: "{{fields.slug}}"
+    identifier_field: title
+    summary: "{{title}} — {{date}}"
+    sortable_fields: [date, title, pinned]
+    fields:
+      - label: Заголовок
+        name: title
+        widget: string
+      - label: URL (slug, латиница)
+        name: slug
+        widget: string
+        hint: "Имя файла без .md, например rabotaet-li-geo-prodvizhenie"
+        pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', "только a-z, 0-9 и дефис"]
+      - label: Дата публикации
+        name: date
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        default: now
+      - label: Дата изменения (необяз.)
+        name: updated
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        required: false
+      - label: Краткое описание (excerpt)
+        name: excerpt
+        widget: text
+      - label: Meta title
+        name: metaTitle
+        widget: string
+        required: false
+      - label: Meta description
+        name: metaDescription
+        widget: text
+        required: false
+      - label: Закрепить вверху списка
+        name: pinned
+        widget: boolean
+        default: false
+      - label: Теги (через запятую)
+        name: tags
+        widget: string
+        hint: "GEO, нейросети, бизнес"
+      - label: Автор
+        name: author
+        widget: select
+        options:
+          - "Леонид К."
+          - "Андрей Ильницкий"
+          - "Андрей Григорьев"
+        default: "Леонид К."
+      - label: Источники
+        name: sources
+        widget: text
+        required: false
+        hint: "Название|https://url, через запятую"
+      - label: Обложка (путь)
+        name: image
+        widget: string
+        required: false
+        hint: "/img/slug.webp — файл загрузите через «Медиа» или положите в public/img"
+      - label: Текст статьи
+        name: body
+        widget: markdown

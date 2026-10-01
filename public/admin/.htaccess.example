@@ -1,0 +1,7 @@
+# Скопируйте в .htaccess на сервере (см. docs/DECAP-ADMIN.md).
+# Файл admin/.htaccess не заливается из CI — настраивается один раз на Beget.
+
+AuthType Basic
+AuthName "GEO Admin"
+AuthUserFile /home/l/ВАШ_ЛОГИН/.htpasswd
+Require valid-user

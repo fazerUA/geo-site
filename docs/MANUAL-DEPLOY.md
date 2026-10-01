@@ -44,9 +44,13 @@ npm run new:post
 
 4. Проверить в браузере: главная, `/blog/`, изменённая страница.
 
-## Редактор без Directus
+## Админка для редактора (Decap)
 
-- Нужен доступ к репозиторию (Sourcecraft) или вы принимаете правки текстом и вносите сами.
+**https://art-web-geo.ru/admin/** — пароль на Beget (`.htaccess`) + Decap для статей блога. Настройка: **`docs/DECAP-ADMIN.md`**.
+
+## Редактор без git напрямую
+
+- Decap (см. выше) или доступ к Sourcecraft / правки текстом.
 - Для `.md` удобны VS Code / Cursor или веб-редактор Sourcecraft.
 - Для `.ts` (прайс, FAQ) — аккуратнее с кавычками и запятыми; при сомнении правит разработчик.
 
@@ -54,6 +58,10 @@ npm run new:post
 
 Интеграция в коде уже есть: см. `docs/DIRECTUS-DEPLOY.md`. Пока переменные Directus **не заданы**, сборка всегда берёт контент из файлов в git.
 
-## CI Sourcecraft
+## CI Sourcecraft (автодеплой)
 
-Автозаливка на FTP **отключена**. При push в `main` CI только проверяет, что проект **собирается** (`npm run build`).
+При push в **`main`**: lint → сборка → **rsync `out/` на Beget по SSH** (как в проекте light-carton).
+
+Настройка секретов и **`DEPLOY_PATH`** для art-web-geo: **`docs/SOURCECRAFT-DEPLOY.md`**.
+
+Если секреты не заданы, pipeline упадёт на шаге deploy — тогда заливайте `out/` вручную (шаги выше).
