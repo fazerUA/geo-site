@@ -1,7 +1,7 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { faqItems } from "@/content/landing/faq-items";
+import { faqItems } from "@/lib/content/landing";
 
 type Props = {
   darkMode?: boolean;

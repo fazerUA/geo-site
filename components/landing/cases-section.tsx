@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
 import { TrendingUp, ArrowUpRight } from "lucide-react";
-import { casesItems } from "@/content/landing/cases-items";
+import { casesItems } from "@/lib/content/landing";
 
 type Props = {
   darkMode?: boolean;

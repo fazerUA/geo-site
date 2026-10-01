@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllBlogPosts, getAllBlogTags } from "@/lib/blog";
+import { getAllBlogPosts, getAllBlogTags } from "@/lib/blog/server";
 import { SITE_URL } from "@/content/site/organization";
 import { resolveAbsoluteUrl } from "@/lib/seo/metadata-helpers";
 

@@ -1,4 +1,4 @@
-import { casesItems } from "@/content/landing/cases-items";
+import { casesItems } from "@/lib/content/landing";
 import { SITE_URL } from "@/content/site/organization";
 
 export function buildCasesSchema() {

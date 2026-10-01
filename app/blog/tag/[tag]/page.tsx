@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { formatBlogTag, formatBlogDate } from "@/lib/blog";
 import {
-  formatBlogTag,
-  formatBlogDate,
   getAllBlogTags,
   getBlogPostsByTagSlug,
   getBlogTagBySlug,
-} from "@/lib/blog";
+} from "@/lib/blog/server";
 import SiteTopNav from "@/components/landing/site-top-nav";
 import { BlogPinnedBadge } from "@/components/blog/pinned-badge";
 import { BlogBreadcrumbs } from "@/components/blog/blog-breadcrumbs";

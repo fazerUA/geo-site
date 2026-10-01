@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getAllBlogPosts, getAllBlogTags, formatBlogDate } from "@/lib/blog";
+import { formatBlogDate } from "@/lib/blog";
+import { getAllBlogPosts, getAllBlogTags } from "@/lib/blog/server";
 import SiteTopNav from "@/components/landing/site-top-nav";
 import { blogPageContent } from "@/content/blog/page-content";
 import { BlogPinnedBadge } from "@/components/blog/pinned-badge";

@@ -4,6 +4,9 @@ node_modules/
 .next/
 out/
 
+# CMS snapshot (генерируется при build / cms:sync)
+.cms-data/
+
 # Logs
 npm-debug.log*
 yarn-debug.log*

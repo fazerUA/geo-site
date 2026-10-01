@@ -1,4 +1,4 @@
-import { pricingPlans } from "@/content/landing/pricing-plans";
+import { pricingPlans } from "@/lib/content/landing";
 import { SITE_URL } from "@/content/site/organization";
 
 export function buildPricingSchema() {

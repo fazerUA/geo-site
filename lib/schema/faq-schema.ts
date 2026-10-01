@@ -1,4 +1,4 @@
-import { faqItems } from "@/content/landing/faq-items";
+import { faqItems } from "@/lib/content/landing";
 import { SITE_URL } from "@/content/site/organization";
 
 export function buildFaqPageSchema() {

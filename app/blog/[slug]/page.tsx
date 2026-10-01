@@ -4,7 +4,12 @@ import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import { getAllBlogPosts, getBlogPostBySlug, getRelatedBlogPosts, formatBlogDate } from "@/lib/blog";
+import { formatBlogDate } from "@/lib/blog";
+import {
+  getAllBlogPosts,
+  getBlogPostBySlug,
+  getRelatedBlogPosts,
+} from "@/lib/blog/server";
 import SiteTopNav from "@/components/landing/site-top-nav";
 import { BlogPinnedBadge } from "@/components/blog/pinned-badge";
 import { blogPageContent } from "@/content/blog/page-content";

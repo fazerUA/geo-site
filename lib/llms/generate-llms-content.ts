@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import { getAllBlogPosts, getAllBlogTags } from "@/lib/blog";
+import { getAllBlogPosts, getAllBlogTags } from "@/lib/blog/server";
 import { organizationContent, SITE_URL } from "@/content/site/organization";
 import { aboutPageContent } from "@/content/about/page-content";
-import { pricingPlans } from "@/content/landing/pricing-plans";
+import { pricingPlans } from "@/lib/content/landing";
 
 const LLMS_PATH = path.join(process.cwd(), "public", "llms.txt");
 

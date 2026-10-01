@@ -15,7 +15,7 @@ import {
   getInvalidLeadFormFields,
   type LeadFormFieldName,
 } from "@/lib/lead-form-validation";
-import { pricingPlans } from "@/content/landing/pricing-plans";
+import { pricingPlans } from "@/lib/content/landing";
 
 type Props = {
   darkMode?: boolean;
