@@ -5,6 +5,11 @@ backend:
   branch: main
   open_authoring: false
 
+# Локально: npm run cms:proxy + npm run dev → правки в файлах без GitHub (см. docs/DECAP-ADMIN.md)
+local_backend:
+  url: http://localhost:8081/api/v1
+  allowed_hosts: ["localhost", "127.0.0.1"]
+
 media_folder: public/img
 public_folder: /img
 
@@ -18,6 +23,58 @@ slug:
   sanitize_replacement: "-"
 
 collections:
+  - name: landing
+    label: Лендинг (главная)
+    files:
+      - label: Тарифы
+        name: pricing
+        file: content/cms/pricing-plans.json
+        fields:
+          - label: Тарифы
+            name: pricingPlans
+            widget: list
+            min: 1
+            fields:
+              - { label: Название, name: name, widget: string }
+              - { label: Цена (текст), name: price, widget: string }
+              - { label: Цена (число для schema), name: priceValue, widget: number }
+              - { label: Подпись под названием, name: label, widget: string }
+              - { label: Выделенный тариф, name: featured, widget: boolean, default: false }
+              - label: Пункты списка
+                name: features
+                widget: list
+                field: { label: Пункт, name: item, widget: string }
+      - label: FAQ
+        name: faq
+        file: content/cms/faq-items.json
+        fields:
+          - label: Вопросы и ответы
+            name: faqItems
+            widget: list
+            min: 1
+            fields:
+              - { label: Вопрос, name: q, widget: string }
+              - { label: Ответ, name: a, widget: text }
+      - label: Кейсы
+        name: cases
+        file: content/cms/cases-items.json
+        fields:
+          - label: Кейсы
+            name: casesItems
+            widget: list
+            min: 1
+            fields:
+              - { label: Заголовок, name: title, widget: string }
+              - { label: Ниша, name: niche, widget: string }
+              - { label: Результат, name: result, widget: string }
+              - { label: Текст, name: text, widget: text }
+              - { label: Ссылка на проект, name: projectUrl, widget: string, required: false }
+              - label: Картинки в модалке
+                name: modalImages
+                widget: list
+                required: false
+                field: { label: Путь, name: path, widget: string }
+
   - name: blog
     label: Блог
     label_singular: Статья

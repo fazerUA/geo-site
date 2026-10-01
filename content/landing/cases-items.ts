@@ -1,3 +1,6 @@
+import source from "@/content/cms/cases-items.json";
+import { normalizeDecapStringList } from "@/lib/cms/normalize-decap-string-list";
+
 export type CaseItem = {
   title: string;
   niche: string;
@@ -7,26 +10,10 @@ export type CaseItem = {
   modalImages?: string[];
 };
 
-export const casesItems: CaseItem[] = [
-  {
-    title: "Как мы увеличили заявки для сервиса доставки цветов",
-    niche: "Услуги для бизнеса",
-    result: "+160% посетителей из поиска за полгода",
-    text: "Клиент получал заявки неравномерно. Мы разобрались, как ищут их услуги, переделали главную страницу сайта и сделали так, чтобы поток клиентов из поиска стал стабильным.",
-    projectUrl: "https://art-web.ru/index.php?id=pro-emocii_rf",
-  },
-  {
-    title: "Как нейросети стали рекомендовать наш IT-продукт",
-    niche: "SaaS / IT-продукт",
-    result: "Бренд чаще появляется в ответах нейросетей",
-    text: "Чётко описали, чем занимается наша веб-студия, добавили реальные примеры работ и экспертные статьи. Теперь нейросети чаще предлагают наш бренд art-web.ru пользователям.",
-    modalImages: ["/img/best-web.jpg", "/img/best-rank.jpg"],
-  },
-  {
-    title: "Как мы исправили сайт после неудачного продвижения",
-    niche: "Интернет-магазин кровли",
-    result: "Больше целевых посетителей на важных страницах",
-    text: "Сайт плохо индексировался поисковиками. Мы навели технический порядок, сделали редизайн, ускорили загрузку и создали понятную структуру. Посетители стали чаще оставлять заявки и покупать.",
-    projectUrl: "https://art-web.ru/index.php?id=crimea-partner",
-  },
-];
+export const casesItems: CaseItem[] = source.casesItems.map((item) => {
+  const modalImages = normalizeDecapStringList(item.modalImages);
+  return {
+    ...item,
+    ...(modalImages.length > 0 ? { modalImages } : {}),
+  };
+});

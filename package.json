@@ -6,6 +6,7 @@
     "dev": "next dev",
     "dev:clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\" && next dev",
     "cms:sync": "npx --yes tsx scripts/sync-cms.ts",
+    "cms:proxy": "npx --yes decap-server",
     "prebuild": "npm run cms:sync && npx --yes tsx lib/llms/run-write-llms.ts",
     "build": "next build",
     "deploy:ftp": "npx --yes tsx scripts/deploy-ftp.ts",

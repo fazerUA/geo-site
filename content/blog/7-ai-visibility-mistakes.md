@@ -1,15 +1,21 @@
 ---
-title: "7 ошибок, из-за которых сайт не видят AI-системы"
+title: 7 ошибок, из-за которых сайт не видят AI-системы
+slug: rabotaet-li-geo-prodvizhenie
+date: 2026-04-24
+excerpt: "Короткий чеклист типичных проблем: от размытого позиционирования до
+  слабых экспертных сигналов и цитируемости"
+metaTitle: 7 ошибок, из-за которых сайт не видят AI-системы
+metaDescription: Разбираем ключевые причины слабой AI-видимости сайта и даем
+  практические рекомендации по исправлению.
+pinned: false
 tags: GEO, AI-видимость, ошибки
-date: "2026-04-24"
-excerpt: "Короткий чеклист типичных проблем: от размытого позиционирования до слабых экспертных сигналов и цитируемости."
-metaTitle: "7 ошибок, из-за которых сайт не видят AI-системы"
-metaDescription: "Разбираем ключевые причины слабой AI-видимости сайта и даем практические рекомендации по исправлению."
-image: /img/oshibochiy-zapros.webp
 author: Леонид К.
-sources: Schema.org Person|https://schema.org/Person, Google Search Essentials|https://developers.google.com/search/docs/essentials, Google E-E-A-T guidance|https://developers.google.com/search/docs/fundamentals/creating-helpful-content
+sources: Schema.org Person|https://schema.org/Person, Google Search
+  Essentials|https://developers.google.com/search/docs/essentials, Google
+  E-E-A-T
+  guidance|https://developers.google.com/search/docs/fundamentals/creating-helpful-content
+image: /img/oshibochiy-zapros.webp
 ---
-
 Одна из самых частых ошибок - размытое позиционирование. Если бренд непонятен, AI-системы реже выбирают его как источник.
 
 ## Критичные ошибки
@@ -20,8 +26,8 @@ sources: Schema.org Person|https://schema.org/Person, Google Search Essentials|h
 
 ## Быстрый чеклист исправлений
 
-- Добавьте понятное позиционирование на ключевые страницы.
-- Покажите экспертизу через кейсы и авторские материалы в [блоге](/blog/).
-- Свяжите статьи между собой и с коммерческими страницами — например, [GEO](/#geo) и [SEO](/#seo).
+* Добавьте понятное позиционирование на ключевые страницы
+* Покажите экспертизу через кейсы и авторские материалы в [блоге](/blog/).
+* Свяжите статьи между собой и с коммерческими страницами — например, [GEO](/#geo) и [SEO](/#seo).
 
 Даже базовые улучшения в этих точках заметно повышают шансы на появление бренда в AI-ответах.
