@@ -1,33 +1,20 @@
-# SourceCraft CI: Directus → static build → FTP
-# Секреты: DIRECTUS_URL, DIRECTUS_TOKEN, FTP_HOST, FTP_USER, FTP_PASSWORD, FTP_REMOTE_DIR, FTP_SECURE
+# Проверка сборки при push. Деплой на хостинг — вручную (см. docs/MANUAL-DEPLOY.md).
 
 on:
   push:
-    - workflows: deploy-site
+    - workflows: verify-build
       filter:
         branches: ["main", "master"]
-  schedule:
-    - workflows: deploy-site
-      cron: "*/10 * * * *"
 
 workflows:
-  deploy-site:
+  verify-build:
     settings:
       max_cube_duration: 30m
     tasks:
-      - name: build-and-deploy
-        env:
-          DIRECTUS_URL: ${{ secrets.DIRECTUS_URL }}
-          DIRECTUS_TOKEN: ${{ secrets.DIRECTUS_TOKEN }}
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_REMOTE_DIR: ${{ secrets.FTP_REMOTE_DIR }}
-          FTP_SECURE: ${{ secrets.FTP_SECURE }}
+      - name: build
         cubes:
-          - name: npm-build-deploy
+          - name: npm-build
             image: docker.io/library/node:22-bookworm
             script:
               - npm ci
               - npm run build
-              - npm run deploy:ftp
