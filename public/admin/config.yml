@@ -4,6 +4,9 @@ backend:
   repo: fazerUA/geo-site
   branch: main
   open_authoring: false
+  # Beget ≠ Netlify: без base_url Decap откроет api.netlify.com → 404. См. docs/DECAP-GITHUB-OAUTH.md
+  # base_url: https://YOUR-NAME.workers.dev
+  # auth_endpoint: auth
 
 # Локально: npm run cms:proxy + npm run dev → правки в файлах без GitHub (см. docs/DECAP-ADMIN.md)
 local_backend:

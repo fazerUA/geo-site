@@ -69,7 +69,7 @@ export const casesItems: CaseItem[] = [
     "niche": "Услуги для бизнеса",
     "result": "+160% посетителей из поиска за полгода",
     "text": "Клиент получал заявки неравномерно. Мы разобрались, как ищут их услуги, переделали главную страницу сайта и сделали так, чтобы поток клиентов из поиска стал стабильным.",
-    "projectUrl": "https://art-web.ru/index.php?id=pro-emocii_rf"
+    "projectUrl": "https://art-web.ru/index.php?id=case-pro-emocii-rf"
   },
   {
     "title": "Как нейросети стали рекомендовать наш IT-продукт",
@@ -86,6 +86,6 @@ export const casesItems: CaseItem[] = [
     "niche": "Интернет-магазин кровли",
     "result": "Больше целевых посетителей на важных страницах",
     "text": "Сайт плохо индексировался поисковиками. Мы навели технический порядок, сделали редизайн, ускорили загрузку и создали понятную структуру. Посетители стали чаще оставлять заявки и покупать.",
-    "projectUrl": "https://art-web.ru/index.php?id=crimea-partner"
+    "projectUrl": "https://art-web.ru/index.php?id=case-crimea-partner-ru"
   }
 ];

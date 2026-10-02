@@ -29,15 +29,22 @@
 
 При деплое через CI файл **`admin/.htaccess` на сервере не перезаписывается** (исключён в rsync). Настройте его один раз на хостинге.
 
-## 2. GitHub (чтобы «Сохранить» работало)
+## 2. GitHub (чтобы «Сохранить» работало на live)
 
-В `public/admin/config.yml` указан репозиторий **`fazerUA/geo-site`**, ветка **`main`**.
+Репозиторий: **`fazerUA/geo-site`**, ветка **`main`**.
 
-1. Репозиторий на GitHub должен быть **актуален** (контент `content/blog/`).
-2. Создайте **GitHub OAuth App** (Settings → Developer settings → OAuth Apps):
-   - Homepage URL: `https://art-web-geo.ru`
-   - Callback URL: `https://art-web-geo.ru/admin/` (или URL из [документации Decap](https://decapcms.org/docs/authentication-backends/))
-3. При **первом сохранении** в Decap браузер один раз откроет авторизацию GitHub (доступ к репо). Редактору можно выдать доступ только к этому репо (collaborator) **или** один служебный аккаунт GitHub, которым пользуетесь только вы.
+На Beget **нельзя** использовать встроенный вход через `api.netlify.com` — будет **Page not found**. Нужен свой OAuth-proxy и строки в config:
+
+```yaml
+base_url: https://ваш-proxy.workers.dev
+auth_endpoint: auth
+```
+
+Пошагово: **`docs/DECAP-GITHUB-OAUTH.md`** (Cloudflare Workers + GitHub OAuth App, ~15 минут).
+
+1. Задеплойте proxy, раскомментируйте `base_url` / `auth_endpoint` в `public/admin/config.yml`.
+2. `npm run build` → залейте `out/`.
+3. В Decap на сайте: **Login** → GitHub (аккаунт с правом push в репо).
 
 ### Sourcecraft
 
@@ -66,7 +73,7 @@ npm run cms:proxy
 
 Откройте **`http://localhost:3000/admin/`** (внутри — Decap на `/admin/cms.html`).
 
-При работающем proxy правки пишутся **в локальные файлы** (`content/blog/`, `content/cms/`), в GitHub не уходят. После проверки: `git commit` → push.
+При работающем proxy правки пишутся **в локальные файлы** (`content/blog/`, `content/cms/`), в GitHub не уходят. После сохранения в Decap обновите главную в браузере (F5) — сайт читает JSON напрямую. Для prod: `git commit` → push → `npm run build` → FTP.
 
 ### Если поля только для чтения
 
